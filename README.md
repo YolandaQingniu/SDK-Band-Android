@@ -20,7 +20,7 @@
 * 在你的module的根目录下的**build.gradle**添加依赖
 	```
 	<!--这里的版本号，1.0.0-beta 可以指定为任意release版本-->
-	<!--如果希望一直使用最新版本可以替换 1.0.0-beta3= 为 master-SNAPSHOT -->
+	<!--如果希望一直使用最新版本可以替换 1.0.0-beta3 为 master-SNAPSHOT -->
 	dependencies {
 	        ...
 	        compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.0-beta'
@@ -42,6 +42,8 @@
    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
    <!--如果是在线的sdk需要网络权限-->
    <uses-permission android:name="android.permission.INTERNET" />
+   <!-- 前台服务权限，防止应用退到后台手环断开连接-->
+   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
 
     ```
