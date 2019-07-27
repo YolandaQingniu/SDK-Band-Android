@@ -92,7 +92,6 @@
     <orderEntry type="library" exported="" name="localbroadcastmanager-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-fragment-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-28.0.0" level="project" />
-    <orderEntry type="library" exported="" name="SDK-Band-Android-1.0.0-beta" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="documentfile-28.0.0" level="project" />
@@ -116,6 +115,7 @@
     <orderEntry type="library" exported="" name="support-core-utils-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="loader-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="butterknife-annotations-8.5.1" level="project" />
+    <orderEntry type="library" exported="" name="SDK-Band-Android-1.0.0-beta1" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="customview-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="runtime-1.1.1" level="project" />
