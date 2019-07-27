@@ -42,8 +42,6 @@
    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
    <!--如果是在线的sdk需要网络权限-->
    <uses-permission android:name="android.permission.INTERNET" />
-   <!-- 前台服务权限，防止应用退到后台手环断开连接-->
-   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
 
     ```
