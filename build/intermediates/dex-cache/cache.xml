@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/ch/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.0.1/57f850a6b317e5582f1dbaff10a9e7d7e1fcdcfb/rxjava-2.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="57f850a6b317e5582f1dbaff10a9e7d7e1fcdcfb">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/release/rxjava-2.0.1_01b12a53ede11794034a966fc9fa64812f17d91b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ch/.android/build-cache/a6eb81da188d03b12472eada8733adbd669cbd81/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="ada02cfa6d6403e90138de411c67d8f6763b3018">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/release/classes_cf947ab292cdbdf6bde8bd174b8933651906b159.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ch/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.0/14b8c877d98005ba3941c9257cfe09f6ed0e0d74/reactive-streams-1.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="14b8c877d98005ba3941c9257cfe09f6ed0e0d74">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/release/reactive-streams-1.0.0_2cef5d3b0911152ca3700a646c7127eddd3ca406.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ch/Code/workspace/android/SDK-Band-Android/qnbandsdk/build/intermediates/bundles/default/libs/qnwristsdk-1.0.0-beta.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="5d4692c42ad942b41f7827bdc0a0ae605637d3a1">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/release/qnwristsdk-1.0.0-beta_6074e2bfa66b4a369c21fbdd1e1685fec6d4fc13.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ch/Code/workspace/android/SDK-Band-Android/qnbandsdk/build/intermediates/bundles/default/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="eb206a968a7ce0b549a8d622cfa860b31539883e">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/release/classes_e3b36a817c8eae1e3c73b556995f9fba552a2d8f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ch/.android/build-cache/728325052a7dc2bf8f6025aaa153b8bc901ff4ff/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="3fec43a847d8788b7642a1932e6266ef8bdab169">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/release/classes_a1aa7826841073bc69b72a6f6f6226b10a9807b8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ch/.android/build-cache/1492e04892a12d69ace98567d66aac4e2b902f94/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="4119ea97a7191ff9b8f33b534ea220448f62f491">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/release/classes_094a118d0fb97ddd7b39844fb7937f41de32cd90.jar" />
+    </item>
+
+</items>

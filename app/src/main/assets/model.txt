@@ -1,0 +1,21 @@
+{
+  "product_code": "BAYSI809CL",
+  "model": "CS10C",
+  "scale_name": "QN-Scale",
+  "internal_model": "0001",
+  "weight_max": "00C8",
+  "weight_scope": "4718",
+  "remark": "公司标准机型",
+  "weight_min": "008C",
+  "unit": 0,
+  "ali_id": "0000",
+  "customer_name": "",
+  "customer_brand": "",
+  "battery_type": 4,
+  "customer_model": "",
+  "number": 0,
+  "delivery_date": "",
+  "device_method": 3,
+  "area": 0,
+  "status_code": "20000"
+}
