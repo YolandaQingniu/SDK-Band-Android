@@ -27,8 +27,6 @@ import com.qingniu.qnble.demo.wrist.utils.WristDataListener;
 import com.qingniu.qnble.demo.wrist.utils.WristDataListenerManager;
 import com.qingniu.qnble.utils.QNLogUtils;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
-import com.yolanda.health.qnblesdk.constant.QNBandExerciseStatus;
-import com.yolanda.health.qnblesdk.constant.QNBandExerciseType;
 import com.yolanda.health.qnblesdk.constant.QNDeviceStatus;
 import com.yolanda.health.qnblesdk.listener.QNBandEventListener;
 import com.yolanda.health.qnblesdk.listener.QNBleConnectionChangeListener;
@@ -44,7 +42,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author: hekang
@@ -140,6 +137,13 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
 
         WristDataListenerManager.getInstance().setListener(mListener);
 
+        //设置手环通知
+        mQNBleApi.getBandManager().setBandServiceInfo("WILL GO自定义标题", "WILL GO自定义内容", new QNResultCallback() {
+            @Override
+            public void onResult(int code, String msg) {
+                QNLogUtils.error("setBandServiceInfo", "code=" + code + ",msg=" + msg);
+            }
+        });
     }
 
     private WristDataListener mListener = new WristDataListener() {
