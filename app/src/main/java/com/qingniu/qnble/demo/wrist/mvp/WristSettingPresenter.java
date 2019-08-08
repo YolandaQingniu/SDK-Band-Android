@@ -1,7 +1,5 @@
 package com.qingniu.qnble.demo.wrist.mvp;
 
-import android.util.Log;
-
 import com.qingniu.qnble.demo.bean.WristSettingItem;
 import com.qingniu.qnble.demo.constant.WristSettingConst;
 import com.qingniu.qnble.demo.util.ToastMaker;
@@ -59,13 +57,13 @@ public class WristSettingPresenter {
 
         WristSettingItem bindItem = new WristSettingItem();
         bindItem.setName("绑定手环");
-        bindItem.setInfo("初次连接手环时，调用绑定手环的命令");
+        bindItem.setInfo("初次连接手环时，调用绑定手环的命令，如果已绑定的手环被其他用户调用手环会断开连接");
         bindItem.setType(WristSettingConst.SETTING_BUTTON);
         items.add(bindItem);
 
         WristSettingItem unbindItem = new WristSettingItem();
         unbindItem.setName("解绑手环");
-        unbindItem.setInfo("不再使用此手环时，调用解绑手环的命令");
+        unbindItem.setInfo("不再使用此手环时，调用解绑手环的命令,解绑后手环会断开连接");
         unbindItem.setType(WristSettingConst.SETTING_BUTTON);
         items.add(unbindItem);
 
@@ -88,8 +86,8 @@ public class WristSettingPresenter {
         items.add(fetchInfoItem);
 
         WristSettingItem syncRealItem = new WristSettingItem();
-        syncRealItem.setName("获取实时心率");
-        syncRealItem.setInfo("获取手环记录的实时心率");
+        syncRealItem.setName("获取实时数据");
+        syncRealItem.setInfo("获取手环记录的实时数据");
         syncRealItem.setType(WristSettingConst.SETTING_BUTTON);
         items.add(syncRealItem);
 
@@ -435,7 +433,7 @@ public class WristSettingPresenter {
             case "获取手环的信息":
                 observable = mSendUtils.fetchBandInfo(item);
                 break;
-            case "获取实时心率":
+            case "获取实时数据":
                 observable = mSendUtils.syncRealData(item);
                 break;
             case "同步今日跑步数据":
@@ -486,8 +484,8 @@ public class WristSettingPresenter {
                     case "校验绑定的手机":
                         ToastMaker.show(mView.getCtx(), "当前手环和之前绑定的设备是否为同一个:" + item.isChecked());
                         break;
-                    case "获取实时心率":
-                        ToastMaker.show(mView.getCtx(), "当前心率为:" + item.getValue());
+                    case "获取实时数据":
+                        ToastMaker.show(mView.getCtx(), "当前数据为:" + item.getValue());
                         break;
                     case "设置目标":
                         ToastMaker.show(mView.getCtx(), item.getErrorMsg());

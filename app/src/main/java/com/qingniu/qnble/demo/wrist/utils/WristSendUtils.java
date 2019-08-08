@@ -3,13 +3,8 @@ package com.qingniu.qnble.demo.wrist.utils;
 import android.util.Log;
 
 import com.qingniu.qnble.demo.bean.WristSettingItem;
-import com.qingniu.qnble.demo.util.ToastMaker;
 import com.qingniu.qnble.utils.QNLogUtils;
 import com.qingniu.wrist.constant.QNExerciseStatus;
-import com.qingniu.wrist.constant.WristSportStatusConst;
-import com.qingniu.wrist.model.WristHeartModel;
-import com.qingniu.wrist.model.WristHeartRemind;
-import com.qingniu.wrist.model.WristSport;
 import com.yolanda.health.qnblesdk.bean.QNAlarm;
 import com.yolanda.health.qnblesdk.bean.QNBandBaseConfig;
 import com.yolanda.health.qnblesdk.bean.QNBandInfo;
@@ -17,8 +12,7 @@ import com.yolanda.health.qnblesdk.bean.QNBandMetrics;
 import com.yolanda.health.qnblesdk.bean.QNCleanInfo;
 import com.yolanda.health.qnblesdk.bean.QNExercise;
 import com.yolanda.health.qnblesdk.bean.QNExerciseData;
-import com.yolanda.health.qnblesdk.bean.QNHealthData;
-import com.yolanda.health.qnblesdk.bean.QNHeartRate;
+import com.yolanda.health.qnblesdk.bean.QNRealTimeData;
 import com.yolanda.health.qnblesdk.bean.QNRemindMsg;
 import com.yolanda.health.qnblesdk.bean.QNSitRemind;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
@@ -47,6 +41,7 @@ public class WristSendUtils {
     private static final String TAG = "WristSendUtils";
 
     private QNBandManager mBandManager;
+    private String userId = "123456789";
 
     public WristSendUtils(QNBandManager qnBandManager) {
         this.mBandManager = qnBandManager;
@@ -59,10 +54,10 @@ public class WristSendUtils {
         Observable<WristSettingItem> observable = Observable.create(new ObservableOnSubscribe<WristSettingItem>() {
             @Override
             public void subscribe(final ObservableEmitter<WristSettingItem> e) throws Exception {
-                mBandManager.bindBand("123456789", new QNBindResultCallback() {
+                mBandManager.bindBand(userId, new QNBindResultCallback() {
                     @Override
                     public void onStatusResult(int bindStatus) {
-                        QNLogUtils.error("绑定状态，bindStatus="+bindStatus);
+                        QNLogUtils.error("绑定状态，bindStatus=" + bindStatus);
                     }
 
                     @Override
@@ -73,7 +68,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("绑定手环，"+msg);
+                        item.setErrorMsg("绑定手环，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -91,11 +86,12 @@ public class WristSendUtils {
         Observable<WristSettingItem> observable = Observable.create(new ObservableOnSubscribe<WristSettingItem>() {
             @Override
             public void subscribe(final ObservableEmitter<WristSettingItem> e) throws Exception {
-                mBandManager.cancelBind(new QNResultCallback() {
+                mBandManager.cancelBind(userId, new QNObjCallback<Boolean>() {
                     @Override
-                    public void onResult(int code, String msg) {
+                    public void onResult(Boolean data, int code, String msg) {
+                        item.setChecked(data);
                         item.setErrorCode(code);
-                        item.setErrorMsg("解绑手环，"+msg);
+                        item.setErrorMsg("解绑手环，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -118,7 +114,7 @@ public class WristSendUtils {
                     public void onResult(Boolean data, int code, String msg) {
                         item.setChecked(data);
                         item.setErrorCode(code);
-                        item.setErrorMsg("校验手环绑定的手机"+msg);
+                        item.setErrorMsg("校验手环绑定的手机" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -141,7 +137,7 @@ public class WristSendUtils {
                     public void onResult(QNBandInfo data, int code, String msg) {
                         Log.d(TAG, "QNBandInfo:" + data);
                         item.setErrorCode(code);
-                        item.setErrorMsg("获取手环信息"+msg);
+                        item.setErrorMsg("获取手环信息" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -163,7 +159,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("同步手环时间，"+msg);
+                        item.setErrorMsg("同步手环时间，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -185,7 +181,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置闹钟，"+msg);
+                        item.setErrorMsg("设置闹钟，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -265,7 +261,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置手环度量，"+msg);
+                        item.setErrorMsg("设置手环度量，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -287,7 +283,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置手环久坐提醒，"+msg);
+                        item.setErrorMsg("设置手环久坐提醒，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -305,12 +301,12 @@ public class WristSendUtils {
         Observable<WristSettingItem> observable = Observable.create(new ObservableOnSubscribe<WristSettingItem>() {
             @Override
             public void subscribe(final ObservableEmitter<WristSettingItem> e) throws Exception {
-                mBandManager.syncHeartRateObserverMode(item.isChecked(),100, new QNResultCallback() {
+                mBandManager.syncHeartRateObserverMode(item.isChecked(), 100, new QNResultCallback() {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置心率监测模式，"+msg);
+                        item.setErrorMsg("设置心率监测模式，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -333,7 +329,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置寻找手机，"+msg);
+                        item.setErrorMsg("设置寻找手机，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -356,7 +352,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置拍照，"+msg);
+                        item.setErrorMsg("设置拍照，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -379,7 +375,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置抬腕识别是否开启，"+msg);
+                        item.setErrorMsg("设置抬腕识别是否开启，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -402,7 +398,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置清除手环设置，"+msg);
+                        item.setErrorMsg("设置清除手环设置，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -425,7 +421,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("重启手环，"+msg);
+                        item.setErrorMsg("重启手环，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -448,7 +444,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("快捷设置手环基础配置"+msg);
+                        item.setErrorMsg("快捷设置手环基础配置" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -466,14 +462,14 @@ public class WristSendUtils {
         Observable<WristSettingItem> observable = Observable.create(new ObservableOnSubscribe<WristSettingItem>() {
             @Override
             public void subscribe(final ObservableEmitter<WristSettingItem> e) throws Exception {
-                mBandManager.syncRealTimeHeartRate(new QNObjCallback<Integer>() {
+                mBandManager.syncRealTimeData(new QNObjCallback<QNRealTimeData>() {
                     @Override
-                    public void onResult(Integer heart, int code, String msg) {
+                    public void onResult(QNRealTimeData data, int code, String msg) {
 
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("获取实时心率"+msg);
-                        item.setValue(heart + "");
+                        item.setErrorMsg("获取实时数据" + msg);
+                        item.setValue(data.toString());
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -501,7 +497,7 @@ public class WristSendUtils {
                 //mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_FITNESS,new QNObjCallback<QNExercise>()
                 // 其他游泳、球类的类似
 
-                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_RUNNING,new QNObjCallback<QNExercise>() {
+                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_RUNNING, new QNObjCallback<QNExercise>() {
                     @Override
                     public void onResult(QNExercise data, int code, String msg) {
                         WristDataListener listener = WristDataListenerManager.getInstance().getListener();
@@ -540,7 +536,7 @@ public class WristSendUtils {
                 //mBandManager.syncHistoryHealthData(QNHealthDataType.HEALTH_DATA_TYPE_FITNESS,new QNObjCallback<List<QNExercise>>()
                 // 其他游泳、球类的类似
 
-                mBandManager.syncHistoryHealthData(QNHealthDataType.HEALTH_DATA_TYPE_RUNNING,new QNObjCallback<List<QNExercise>>() {
+                mBandManager.syncHistoryHealthData(QNHealthDataType.HEALTH_DATA_TYPE_RUNNING, new QNObjCallback<List<QNExercise>>() {
                     @Override
                     public void onResult(List<QNExercise> datas, int code, String msg) {
                         WristDataListener listener = WristDataListenerManager.getInstance().getListener();
@@ -637,7 +633,7 @@ public class WristSendUtils {
                     e.onComplete();
                     return;
                 }
-                mBandManager.syncHeartRateObserverMode(true, interval,new QNResultCallback() {
+                mBandManager.syncHeartRateObserverMode(true, interval, new QNResultCallback() {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
@@ -678,7 +674,7 @@ public class WristSendUtils {
                     e.onComplete();
                     return;
                 }
-                mBandManager.setHeartRemind(true,remindValue, new QNResultCallback() {
+                mBandManager.setHeartRemind(true, remindValue, new QNResultCallback() {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
@@ -705,11 +701,11 @@ public class WristSendUtils {
                 //此处只展示 跑步开始和跑步结束
                 int status = item.isChecked() ? QNExerciseStatus.APP_START_EXERCISE : QNExerciseStatus.APP_FINISH_EXERCISE;
                 int type = QNBandExerciseType.BAND_EXERCISE_RUNNING;
-                mBandManager.setExerciseStatus(status,type, new QNResultCallback() {
+                mBandManager.setExerciseStatus(status, type, new QNResultCallback() {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置跑步状态，"+msg);
+                        item.setErrorMsg("设置跑步状态，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -721,7 +717,8 @@ public class WristSendUtils {
     }
 
     /**
-     *  发送跑步数据
+     * 发送跑步数据
+     *
      * @param runningData
      * @param item
      * @return
@@ -741,7 +738,7 @@ public class WristSendUtils {
                         }
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("发送跑步数据，"+msg);
+                        item.setErrorMsg("发送跑步数据，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
