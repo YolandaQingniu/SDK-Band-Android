@@ -1,11 +1,11 @@
 package com.qingniu.qnble.demo.wrist.mvp;
 
+
 import com.qingniu.qnble.demo.bean.WristSettingItem;
 import com.qingniu.qnble.demo.constant.WristSettingConst;
 import com.qingniu.qnble.demo.util.ToastMaker;
 import com.qingniu.qnble.demo.wrist.utils.WristSendUtils;
 import com.qingniu.qnble.utils.QNLogUtils;
-import com.qingniu.wrist.constant.WristSportTypeConst;
 import com.yolanda.health.qnblesdk.bean.QNAlarm;
 import com.yolanda.health.qnblesdk.bean.QNBandBaseConfig;
 import com.yolanda.health.qnblesdk.bean.QNBandMetrics;
@@ -15,6 +15,7 @@ import com.yolanda.health.qnblesdk.bean.QNRemindMsg;
 import com.yolanda.health.qnblesdk.bean.QNSitRemind;
 import com.yolanda.health.qnblesdk.bean.QNWeek;
 import com.yolanda.health.qnblesdk.constant.QNBandConst;
+import com.yolanda.health.qnblesdk.constant.QNBandExerciseType;
 import com.yolanda.health.qnblesdk.out.QNBandManager;
 import com.yolanda.health.qnblesdk.out.QNUser;
 
@@ -257,13 +258,17 @@ public class WristSettingPresenter {
                     qnWeek.setSun(true);
                     qnAlarm.setQnWeek(qnWeek);
 
-                    ToastMaker.show(mView.getCtx(), "将在" + qnAlarm.getHour() + ":" + qnAlarm.getMinute() + "提醒");
-
+                    final int hour1 = qnAlarm.getHour();
+                    final int minute1 = qnAlarm.getMinute();
                     mSendUtils.syncAlarm(qnAlarm, item).subscribe(new Consumer<WristSettingItem>() {
 
                         @Override
                         public void accept(WristSettingItem wristSettingItem) throws Exception {
-                            QNLogUtils.log("设置闹钟", wristSettingItem.getName());
+                            if (wristSettingItem.getErrorCode() == 0) {
+                                ToastMaker.show(mView.getCtx(), "将在" + hour1 + ":" + minute1 + "提醒");
+                            } else {
+                                QNLogUtils.log("设置闹钟", wristSettingItem.getName() + "," + wristSettingItem.getErrorMsg());
+                            }
                         }
                     });
 
@@ -312,7 +317,7 @@ public class WristSettingPresenter {
 
                         @Override
                         public void accept(WristSettingItem wristSettingItem) throws Exception {
-                            ToastMaker.show(mView.getCtx(), "本次测试久坐提醒每隔" + interval + "分钟提示");
+                            ToastMaker.show(mView.getCtx(), "本次测试久坐提醒每隔" + interval + "分钟提示" + "," + wristSettingItem.getErrorMsg());
                         }
                     });
 
@@ -334,7 +339,7 @@ public class WristSettingPresenter {
                         @Override
                         public void accept(WristSettingItem wristSettingItem) throws Exception {
 
-                            ToastMaker.show(mView.getCtx(), "本次测试 重置闹钟、目标、度量、久坐提醒、寻找手机、抬腕识别、自动检测");
+                            ToastMaker.show(mView.getCtx(), "本次测试 重置闹钟、目标、度量、久坐提醒、寻找手机、抬腕识别、自动检测" + "," + wristSettingItem.getErrorMsg());
 
                         }
                     });
@@ -364,7 +369,7 @@ public class WristSettingPresenter {
                         @Override
                         public void accept(WristSettingItem wristSettingItem) throws Exception {
 
-                            ToastMaker.show(mView.getCtx(), "开启自动检测心率，开启抬腕识别，开启寻找手机，开启防丢提醒，步数目标4000，24小时，公制，中文");
+                            ToastMaker.show(mView.getCtx(), "开启自动检测心率，开启抬腕识别，开启寻找手机，开启防丢提醒，步数目标4000，24小时，公制，中文" + "," + wristSettingItem.getErrorMsg());
 
                         }
                     });
@@ -381,7 +386,7 @@ public class WristSettingPresenter {
                     mSendUtils.msgRemind(msg, item).subscribe(new Consumer<WristSettingItem>() {
                         @Override
                         public void accept(WristSettingItem wristSettingItem) throws Exception {
-                            ToastMaker.show(mView.getCtx(), "收到一条消息");
+                            ToastMaker.show(mView.getCtx(), "发送消息" + "," + wristSettingItem.getErrorMsg());
                         }
                     });
                     break;
@@ -389,19 +394,19 @@ public class WristSettingPresenter {
                     mSendUtils.callRemind("15907557052", "yolanda", item).subscribe(new Consumer<WristSettingItem>() {
                         @Override
                         public void accept(WristSettingItem wristSettingItem) throws Exception {
-                            ToastMaker.show(mView.getCtx(), "收到来电消息");
+                            ToastMaker.show(mView.getCtx(), "发送来电消息" + "," + wristSettingItem.getErrorMsg());
                         }
                     });
                     break;
                 case "推送跑步数据":
                     QNExerciseData runningData = new QNExerciseData();
                     //其他游泳等类型数据，只需要将设置的类型改掉即可
-                    runningData.setExerciseType(WristSportTypeConst.SPORT_TYPE_RUNNING).setCalories(100)
+                    runningData.setExerciseType(QNBandExerciseType.BAND_EXERCISE_RUNNING).setCalories(100)
                             .setHeartRate(80).setMinkm(120).setStep(8000).setExerciseTime(200).setDistance(10000);
                     mSendUtils.sendSportData(runningData, item).subscribe(new Consumer<WristSettingItem>() {
                         @Override
                         public void accept(WristSettingItem wristSettingItem) throws Exception {
-                            ToastMaker.show(mView.getCtx(), "推送跑步数据");
+                            ToastMaker.show(mView.getCtx(), "推送跑步数据" + "," + wristSettingItem.getErrorMsg());
                         }
                     });
                     break;
@@ -482,22 +487,10 @@ public class WristSettingPresenter {
             public void accept(WristSettingItem item) throws Exception {
                 switch (item.getName()) {
                     case "校验绑定的手机":
-                        ToastMaker.show(mView.getCtx(), "当前手环和之前绑定的设备是否为同一个:" + item.isChecked());
+                        ToastMaker.show(mView.getCtx(), "当前手环和之前绑定的设备是否为同一个:" + item.getErrorMsg());
                         break;
                     case "获取实时数据":
-                        ToastMaker.show(mView.getCtx(), "当前数据为:" + item.getValue());
-                        break;
-                    case "设置目标":
-                        ToastMaker.show(mView.getCtx(), item.getErrorMsg());
-                        break;
-                    case "设置心率开关和心率间隔":
-                        ToastMaker.show(mView.getCtx(), item.getErrorMsg());
-                        break;
-                    case "设置心率提醒":
-                        ToastMaker.show(mView.getCtx(), item.getErrorMsg());
-                        break;
-                    case "设置跑步状态":
-                        ToastMaker.show(mView.getCtx(), "设置跑步状态");
+                        ToastMaker.show(mView.getCtx(), item.getErrorMsg()+"，当前数据为:" + item.getValue());
                         break;
                     default:
                         ToastMaker.show(mView.getCtx(), item.getErrorMsg());

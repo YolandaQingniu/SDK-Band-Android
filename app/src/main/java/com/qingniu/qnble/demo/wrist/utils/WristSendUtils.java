@@ -469,7 +469,7 @@ public class WristSendUtils {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
                         item.setErrorMsg("获取实时数据" + msg);
-                        item.setValue(data.toString());
+                        item.setValue(null != data ? data.toString() : "[]");
                         e.onNext(item);
                         e.onComplete();
                     }
