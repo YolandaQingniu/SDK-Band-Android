@@ -111,8 +111,8 @@
     <orderEntry type="library" exported="" name="cursoradapter-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="slidingpanelayout-28.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="jsr305-2.0.1" level="project" />
-    <orderEntry type="library" exported="" name="qnwristsdk-1.0.0-beta5" level="project" />
     <orderEntry type="library" exported="" name="versionedparcelable-28.0.0" level="project" />
+    <orderEntry type="library" exported="" name="qnwristsdk-1.0.0-beta6" level="project" />
     <orderEntry type="library" exported="" name="livedata-1.1.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-core-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="support-core-utils-28.0.0" level="project" />
