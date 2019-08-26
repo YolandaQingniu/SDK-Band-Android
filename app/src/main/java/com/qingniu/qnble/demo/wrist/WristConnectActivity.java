@@ -280,7 +280,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
     protected void onDestroy() {
         mQNBleApi.setBleConnectionChangeListener(null);
         mQNBleApi.setDataListener(null);
-        WristDataListenerManager.getInstance().setListener(null);
+        mQNBleApi.getBandManager().setEventListener(null);
         super.onDestroy();
     }
 
