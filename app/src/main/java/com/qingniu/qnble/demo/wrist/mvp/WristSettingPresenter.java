@@ -1,11 +1,15 @@
 package com.qingniu.qnble.demo.wrist.mvp;
 
 
+import android.content.Intent;
+
 import com.qingniu.qnble.demo.bean.WristSettingItem;
 import com.qingniu.qnble.demo.constant.WristSettingConst;
 import com.qingniu.qnble.demo.util.ToastMaker;
+import com.qingniu.qnble.demo.wrist.OTA_Active;
 import com.qingniu.qnble.demo.wrist.utils.WristSendUtils;
 import com.qingniu.qnble.utils.QNLogUtils;
+import com.qingniu.wrist.constant.QNExerciseStatus;
 import com.yolanda.health.qnblesdk.bean.QNAlarm;
 import com.yolanda.health.qnblesdk.bean.QNBandBaseConfig;
 import com.yolanda.health.qnblesdk.bean.QNBandMetrics;
@@ -16,6 +20,7 @@ import com.yolanda.health.qnblesdk.bean.QNSitRemind;
 import com.yolanda.health.qnblesdk.bean.QNWeek;
 import com.yolanda.health.qnblesdk.constant.QNBandConst;
 import com.yolanda.health.qnblesdk.constant.QNBandExerciseType;
+import com.yolanda.health.qnblesdk.listener.QNResultCallback;
 import com.yolanda.health.qnblesdk.out.QNBandManager;
 import com.yolanda.health.qnblesdk.out.QNUser;
 
@@ -24,6 +29,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -211,6 +218,13 @@ public class WristSettingPresenter {
         sendSportData.setType(WristSettingConst.SETTING_JUMP);
         items.add(sendSportData);
 
+
+        WristSettingItem ota = new WristSettingItem();
+        ota.setName("ota升级");
+        ota.setInfo("ota升级文件放置在内部存储卡的根目录下");
+        ota.setType(WristSettingConst.SETTING_BUTTON);
+        items.add(ota);
+
         mView.onRvRender(items);
 
     }
@@ -228,7 +242,7 @@ public class WristSettingPresenter {
      * 根据类型，发送设置命令
      */
     public void sendCmd(final int position, WristSettingItem item) {
-        if (mSendUtils == null) {
+        if (mSendUtils == null && !item.getName().equals("ota升级")) {
             ToastMaker.show(mView.getCtx(), "需要等手环准备好之后才能开始交互");
             return;
         }
@@ -476,7 +490,9 @@ public class WristSettingPresenter {
             case "设置跑步状态":
                 observable = mSendUtils.setSportStatus(item);
                 break;
-
+            case "ota升级":
+                mView.turnToOTA();
+                break;
         }
         if (observable == null) {
             ToastMaker.show(mView.getCtx(), "设置方法调用异常");

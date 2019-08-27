@@ -1,1 +1,1 @@
-include ':qnbandsdk', ':app'
+include ':qnbandsdk', ':app', ':bandota'

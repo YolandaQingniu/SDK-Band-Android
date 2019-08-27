@@ -34,4 +34,6 @@ public interface WristSettingView {
      * @param item     用来单独更新item信息
      */
     void onSetupState(int position, WristSettingItem item);
+
+    void turnToOTA();
 }

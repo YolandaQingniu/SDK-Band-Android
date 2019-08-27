@@ -78,4 +78,5 @@ dependencies {
     }
     compile "io.reactivex.rxjava2:rxjava:$RX_JAVA2_VERSION"
     compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.0-beta6'
+    compile project(path: ':bandota')
 }

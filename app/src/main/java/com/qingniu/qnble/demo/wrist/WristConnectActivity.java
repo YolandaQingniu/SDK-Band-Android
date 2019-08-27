@@ -117,7 +117,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         settingAdapter.setOnItemClickListen(new WristSettingAdapter.WristSettingListener() {
             @Override
             public void onItemClick(int position, WristSettingItem item) {
-                if (!isReady) {
+                if (!isReady && !item.getName().equals("ota升级")) {
                     ToastMaker.show(WristConnectActivity.this, "需要等手环准备好之后才能开始交互");
                     return;
                 }
@@ -356,5 +356,24 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
             });
         }
 
+    }
+
+    @Override
+    public void turnToOTA() {
+        mQNBleApi.disconnectDevice(mWristDevice, new QNResultCallback() {
+            @Override
+            public void onResult(int code, String msg) {
+                //断开连接状态
+                if (code == CheckStatus.OK.getCode()) {
+                    finish();
+                } else {
+                    ToastMaker.show(WristConnectActivity.this, msg);
+                }
+            }
+        });
+        Intent intent = new Intent(this,OTA_Active.class);
+        intent.putExtra("DEVICE_MAC",mWristDevice.getMac());
+        intent.putExtra("DEVICE_NAME",mWristDevice.getName());
+        startActivity(intent);
     }
 }
