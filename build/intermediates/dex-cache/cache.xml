@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/ch/.android/build-cache/464545811fd924e0c220904acb3e2c70a4b398d0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="128b6b468918515fb140ae4014c76477f61fbb13">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/classes_d47efe6ba2823ec438e3a3f1cdb8b46e2f84b5a6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ch/.android/build-cache/464545811fd924e0c220904acb3e2c70a4b398d0/output/jars/libs/qnwristsdk-1.0.0-beta10.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="28.0.3"
+        sha1="eef1471e5b0dbc07a2cea53d0e0296e783e3d0db">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/qnwristsdk-1.0.0-beta10_2c88b12f6f02adeb0957773e4508b54d29a6653a.jar" />
+    </item>
+
+</items>
