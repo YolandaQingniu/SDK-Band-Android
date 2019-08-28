@@ -27,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bandota.BleService;
 import com.qingniu.qnble.demo.R;
 
 import java.io.File;

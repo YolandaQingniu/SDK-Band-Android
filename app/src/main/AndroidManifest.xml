@@ -63,7 +63,7 @@
         <service android:name="com.qingniu.scale.measure.ble.ScaleBleService"/>
         <service android:name="com.qingniu.scale.measure.broadcast.ScaleBroadcastService"/>
         <service android:name="com.qingniu.wrist.ble.WristBleService"/>
-        <service android:name="com.example.bandota.BleService"/>
+        <service android:name=".wrist.BleService"/>
     </application>
 
 </manifest>
