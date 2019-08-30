@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="SDK-Band-Android-1.0.0-beta11">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/6bac9f1385d9b9e1068acb96b5f98888024dffb8/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/6bac9f1385d9b9e1068acb96b5f98888024dffb8/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/6bac9f1385d9b9e1068acb96b5f98888024dffb8/output/jars/libs/qnwristsdk-1.0.0-beta11.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
