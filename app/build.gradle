@@ -76,6 +76,9 @@ dependencies {
         exclude module: "rxjava"
         exclude module: "okhttp"
     }
+    compile('com.github.gzu-liyujiang.AndroidPicker:FilePicker:1.5.6') {
+        exclude group: 'com.android.support'
+    }
     compile "io.reactivex.rxjava2:rxjava:$RX_JAVA2_VERSION"
-    compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.0-beta13'
+    compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.0-beta14'
 }

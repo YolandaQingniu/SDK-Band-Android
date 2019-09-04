@@ -15,6 +15,7 @@ import com.yolanda.health.qnblesdk.bean.QNExerciseData;
 import com.yolanda.health.qnblesdk.bean.QNRealTimeData;
 import com.yolanda.health.qnblesdk.bean.QNRemindMsg;
 import com.yolanda.health.qnblesdk.bean.QNSitRemind;
+import com.yolanda.health.qnblesdk.bean.QNSleep;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
 import com.yolanda.health.qnblesdk.constant.QNBandExerciseType;
 import com.yolanda.health.qnblesdk.constant.QNHealthDataType;
@@ -58,6 +59,15 @@ public class WristSendUtils {
                     @Override
                     public void onStatusResult(int bindStatus) {
                         QNLogUtils.error("绑定状态，bindStatus=" + bindStatus);
+                        if (bindStatus == 100) {
+                            //可以进行命令的发送
+                            mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_SLEEP, new QNObjCallback<QNSleep>() {
+                                @Override
+                                public void onResult(QNSleep data, int code, String msg) {
+                                    //测试
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -505,14 +515,118 @@ public class WristSendUtils {
                             List<QNExercise> list = new ArrayList<>();
                             list.add(data);
                             listener.onAcceptData("syncTodayHealthData", list);
+
                         }
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
                         item.setErrorMsg(msg);
                         e.onNext(item);
                         e.onComplete();
+                        if (null != data) {
+                            QNLogUtils.logAndWrite("test", "runnningData=" + data.toString());
+                        } else {
+                            QNLogUtils.logAndWrite("test", "没有runnningData");
+                        }
+
                     }
                 });
+             /*   mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_SPORT, new QNObjCallback<QNSport>() {
+
+                    @Override
+                    public void onResult(QNSport data, int code, String msg) {
+                        if (code == CheckStatus.OK.getCode()) {
+                            if (null != data) {
+                                QNLogUtils.logAndWrite("test", "QNSport=" + data.toString());
+                            } else {
+                                QNLogUtils.logAndWrite("test", "没有QNSport");
+                            }
+
+                        }
+                    }
+                });
+                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_WALK, new QNObjCallback<QNExercise>() {
+
+                    @Override
+                    public void onResult(QNExercise data, int code, String msg) {
+                        if (code == CheckStatus.OK.getCode()) {
+                            if (null != data) {
+                                QNLogUtils.logAndWrite("test", "walkData=" + data.toString());
+                            } else {
+                                QNLogUtils.logAndWrite("test", "没有walkData");
+                            }
+                        }
+                    }
+                });
+                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_FITNESS, new QNObjCallback<QNExercise>() {
+
+                    @Override
+                    public void onResult(QNExercise data, int code, String msg) {
+                        if (code == CheckStatus.OK.getCode()) {
+                            if (null != data) {
+                                QNLogUtils.logAndWrite("test", "fitnessData=" + data.toString());
+                            } else {
+                                QNLogUtils.logAndWrite("test", "没有fitnessData");
+                            }
+
+                        }
+                    }
+                });
+                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_BALL, new QNObjCallback<QNExercise>() {
+
+                    @Override
+                    public void onResult(QNExercise data, int code, String msg) {
+                        if (code == CheckStatus.OK.getCode()) {
+                            if (null != data) {
+                                QNLogUtils.logAndWrite("test", "ballData=" + data.toString());
+                            } else {
+                                QNLogUtils.logAndWrite("test", "没有ballData");
+                            }
+
+                        }
+                    }
+                });
+                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_SWIM, new QNObjCallback<QNExercise>() {
+
+                    @Override
+                    public void onResult(QNExercise data, int code, String msg) {
+                        if (code == CheckStatus.OK.getCode()) {
+                            if (null != data) {
+                                QNLogUtils.logAndWrite("test", "swimData=" + data.toString());
+                            } else {
+                                QNLogUtils.logAndWrite("test", "没有swimData");
+                            }
+
+                        }
+                    }
+                });
+                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_HEART, new QNObjCallback<QNHeartRate>() {
+
+                    @Override
+                    public void onResult(QNHeartRate data, int code, String msg) {
+                        if (code == CheckStatus.OK.getCode()) {
+                            if (null != data) {
+                                QNLogUtils.logAndWrite("test", "QNHeartRate=" + data.toString());
+                            } else {
+                                QNLogUtils.logAndWrite("test", "没有QNHeartRate");
+                            }
+
+                        }
+                    }
+                });
+                mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_SLEEP, new QNObjCallback<QNSleep>() {
+
+                    @Override
+                    public void onResult(QNSleep data, int code, String msg) {
+                        if (code == CheckStatus.OK.getCode()) {
+                            if (null != data) {
+                                QNLogUtils.logAndWrite("test", "QNSleep=" + data.toString());
+                            } else {
+                                QNLogUtils.logAndWrite("test", "没有QNSleep");
+                            }
+
+                        }
+                    }
+                });*/
             }
         });
 

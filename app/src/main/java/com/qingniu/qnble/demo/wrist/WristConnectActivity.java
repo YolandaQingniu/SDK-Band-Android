@@ -8,10 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.qingniu.qnble.demo.R;
@@ -30,6 +32,7 @@ import com.yolanda.health.qnblesdk.constant.CheckStatus;
 import com.yolanda.health.qnblesdk.constant.QNDeviceStatus;
 import com.yolanda.health.qnblesdk.listener.QNBandEventListener;
 import com.yolanda.health.qnblesdk.listener.QNBleConnectionChangeListener;
+import com.yolanda.health.qnblesdk.listener.QNDfuProgressCallback;
 import com.yolanda.health.qnblesdk.listener.QNResultCallback;
 import com.yolanda.health.qnblesdk.out.QNBandManager;
 import com.yolanda.health.qnblesdk.out.QNBleApi;
@@ -42,6 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.qqtheme.framework.picker.FilePicker;
 
 /**
  * @author: hekang
@@ -60,6 +64,17 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
     TextView backTv;
     @BindView(R.id.setting_rv)
     RecyclerView recyclerView;
+    @BindView(R.id.fileSelectBtn)
+    Button fileSelectBtn;
+    @BindView(R.id.filePath)
+    TextView filePath;
+    @BindView(R.id.otaBtn)
+    Button otaBtn;
+    @BindView(R.id.otaStatus)
+    TextView otaStatus;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+
 
     public static Intent getCallIntent(Context context, User user, QNBleDevice device) {
         return new Intent(context, WristConnectActivity.class)
@@ -117,7 +132,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         settingAdapter.setOnItemClickListen(new WristSettingAdapter.WristSettingListener() {
             @Override
             public void onItemClick(int position, WristSettingItem item) {
-                if (!isReady && !item.getName().equals("ota升级")) {
+                if (!isReady) {
                     ToastMaker.show(WristConnectActivity.this, "需要等手环准备好之后才能开始交互");
                     return;
                 }
@@ -284,7 +299,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         super.onDestroy();
     }
 
-    @OnClick({R.id.connectBtn, R.id.back_tv})
+    @OnClick({R.id.connectBtn, R.id.back_tv, R.id.fileSelectBtn, R.id.otaBtn})
     public void onViewClicked(View view) {
 
         switch (view.getId()) {
@@ -320,6 +335,41 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
                         }
                     }
                 });
+                break;
+            case R.id.fileSelectBtn:
+                FilePicker picker = new FilePicker(this, FilePicker.FILE);
+                picker.setShowHideDir(false);
+                picker.setShowUpDir(true);
+                picker.setShowHomeDir(true);
+                picker.setOnFilePickListener(new FilePicker.OnFilePickListener() {
+                    @Override
+                    public void onFilePicked(String currentPath) {
+                        filePath.setText(currentPath);
+                    }
+                });
+                picker.show();
+                break;
+            case R.id.otaBtn:
+                if (!isReady) {
+                    ToastMaker.show(WristConnectActivity.this, "需要等手环准备好之后才能开始交互");
+                    return;
+                }
+                if (TextUtils.isEmpty(filePath.getText().toString())) {
+                    ToastMaker.show(this, "请先选择升级的Bin文件");
+                } else {
+                    QNBleApi.getInstance(this).getBandManager().startDfu(filePath.getText().toString(), new QNDfuProgressCallback() {
+                        @Override
+                        public void onResult(int progress) {
+                            progressBar.setProgress(progress);
+                            otaStatus.setText(progress + "%");
+                        }
+                    }, new QNResultCallback() {
+                        @Override
+                        public void onResult(int code, String msg) {
+
+                        }
+                    });
+                }
                 break;
         }
     }
@@ -358,22 +408,4 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
 
     }
 
-    @Override
-    public void turnToOTA() {
-        mQNBleApi.disconnectDevice(mWristDevice, new QNResultCallback() {
-            @Override
-            public void onResult(int code, String msg) {
-                //断开连接状态
-                if (code == CheckStatus.OK.getCode()) {
-                    finish();
-                } else {
-                    ToastMaker.show(WristConnectActivity.this, msg);
-                }
-            }
-        });
-        Intent intent = new Intent(this,OTA_Active.class);
-        intent.putExtra("DEVICE_MAC",mWristDevice.getMac());
-        intent.putExtra("DEVICE_NAME",mWristDevice.getName());
-        startActivity(intent);
-    }
 }

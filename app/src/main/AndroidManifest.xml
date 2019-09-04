@@ -54,16 +54,11 @@
         <activity
             android:name=".wrist.WristDataActivity"
             android:theme="@style/ProjectDialogTheme"/>
-        <activity android:name=".wrist.OTA_Active"
-            android:screenOrientation="portrait"
-            />
 
         <!--SDk中需要申请的服务-->
         <service android:name="com.qingniu.qnble.scanner.BleScanService"/>
         <service android:name="com.qingniu.scale.measure.ble.ScaleBleService"/>
         <service android:name="com.qingniu.scale.measure.broadcast.ScaleBroadcastService"/>
-        <service android:name="com.qingniu.wrist.ble.WristBleService"/>
-        <service android:name=".wrist.BleService"/>
     </application>
 
 </manifest>
