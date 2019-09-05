@@ -366,7 +366,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
                     }, new QNResultCallback() {
                         @Override
                         public void onResult(int code, String msg) {
-
+                            QNLogUtils.log("OTA升级", "code =" + code + ",msg=" + msg);
                         }
                     });
                 }
