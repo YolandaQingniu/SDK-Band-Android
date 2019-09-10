@@ -3,21 +3,21 @@
 
     <item
         is-multidex="false"
-        jar="/Users/ch/.android/build-cache/46adf20aff339dfc8875392f402bb30250c4f60f/output/jars/classes.jar"
+        jar="/Users/ch/.android/build-cache/3ad60215bedb6119db7908b18b946eb9cbdff6a9/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="28.0.3"
-        sha1="07dcaeef6f1751ac880b93f1f37b4b6d5b9df34d">
-        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/classes_f71f93fe3035fb2e74273b48a385364c5eb8e18a.jar" />
+        sha1="7d711cdc0ec811af7ecc4a18731f0d7ffb3bb42a">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/classes_063d739a8006022a22137e2d5abc6b5d5058d4dd.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/ch/.android/build-cache/46adf20aff339dfc8875392f402bb30250c4f60f/output/jars/libs/qnwristsdk-1.0.0-beta18.jar"
+        jar="/Users/ch/.android/build-cache/3ad60215bedb6119db7908b18b946eb9cbdff6a9/output/jars/libs/qnwristsdk-1.0.0-beta20.jar"
         jumboMode="false"
         optimize="true"
         revision="28.0.3"
-        sha1="cdbed63c92d576bdfc5e7af88f8b265a451ddb9e">
-        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/qnwristsdk-1.0.0-beta18_7a93beec3dbd9b1cdded5bd4e909e9decc455f63.jar" />
+        sha1="35f415f05369e5b98e4e87c39589a74c8acacdbb">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/qnwristsdk-1.0.0-beta20_3447bf3e97d324a6811f78f033b05b1edbc68177.jar" />
     </item>
 
 </items>

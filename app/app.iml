@@ -96,6 +96,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="collections-28.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="runner-0.5" level="project" />
+    <orderEntry type="library" exported="" name="SDK-Band-Android-1.0.0-beta20" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-idling-resource-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="localbroadcastmanager-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-28.0.0" level="project" />
@@ -153,6 +154,5 @@
     <orderEntry type="library" exported="" name="interpolator-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="crashreport-1.2.8" level="project" />
     <orderEntry type="library" exported="" name="print-28.0.0" level="project" />
-    <orderEntry type="library" exported="" name="SDK-Band-Android-1.0.0-beta19" level="project" />
   </component>
 </module>
