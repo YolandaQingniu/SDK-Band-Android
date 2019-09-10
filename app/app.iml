@@ -151,7 +151,7 @@
     <orderEntry type="library" exported="" name="butterknife-8.5.1" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="interpolator-28.0.0" level="project" />
-    <orderEntry type="library" exported="" name="SDK-Band-Android-1.0.0-beta16" level="project" />
+    <orderEntry type="library" exported="" name="SDK-Band-Android-1.0.0-beta17" level="project" />
     <orderEntry type="library" exported="" name="crashreport-1.2.8" level="project" />
     <orderEntry type="library" exported="" name="print-28.0.0" level="project" />
   </component>

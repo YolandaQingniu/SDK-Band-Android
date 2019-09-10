@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.qingniu.qnble.demo.R;
-import com.qingniu.qnble.demo.adapter.WristSettingAdapter;
 import com.qingniu.qnble.demo.bean.User;
 import com.qingniu.qnble.demo.bean.WristSettingItem;
 import com.qingniu.qnble.demo.constant.WristSettingConst;
@@ -105,7 +104,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
     private boolean isReady;
 
 
-    private WristSettingAdapter settingAdapter;
+    private com.qingniu.qnble.demo.adapter.WristSettingAdapter settingAdapter;
 
     private List<WristSettingItem> mItems = new ArrayList<>();
 
@@ -128,12 +127,16 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         initBleState();
         initWristData();
 
-        settingAdapter = new WristSettingAdapter(this, mItems, presenter);
-        settingAdapter.setOnItemClickListen(new WristSettingAdapter.WristSettingListener() {
+        settingAdapter = new com.qingniu.qnble.demo.adapter.WristSettingAdapter(this, mItems, presenter);
+        settingAdapter.setOnItemClickListen(new com.qingniu.qnble.demo.adapter.WristSettingAdapter.WristSettingListener() {
             @Override
             public void onItemClick(int position, WristSettingItem item) {
                 if (!isReady) {
                     ToastMaker.show(WristConnectActivity.this, "需要等手环准备好之后才能开始交互");
+                    return;
+                }
+                if (!isConnected) {
+                    ToastMaker.show(WristConnectActivity.this, "手环未连接，请先连接手环！");
                     return;
                 }
                 presenter.sendCmd(position, item);
@@ -242,6 +245,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
             @Override
             public void onDisconnected(QNBleDevice device) {
                 isConnected = false;
+                isReady = false;
                 statusTv.setText("手环断开连接");
             }
 
@@ -256,6 +260,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
             public void onDeviceStateChange(QNBleDevice device, int status) {
                 if (device.getMac().equals(mWristDevice.getMac())) {
                     if (status == QNDeviceStatus.STATE_READY) {
+                        QNLogUtils.logAndWrite("状态改变STATE_READY");
                         isReady = true;
                         QNBandManager bandManager = mQNBleApi.getBandManager();
                         presenter.setBandManager(bandManager);

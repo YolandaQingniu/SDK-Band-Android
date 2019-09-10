@@ -12,10 +12,12 @@ import com.yolanda.health.qnblesdk.bean.QNBandMetrics;
 import com.yolanda.health.qnblesdk.bean.QNCleanInfo;
 import com.yolanda.health.qnblesdk.bean.QNExercise;
 import com.yolanda.health.qnblesdk.bean.QNExerciseData;
+import com.yolanda.health.qnblesdk.bean.QNHeartRate;
 import com.yolanda.health.qnblesdk.bean.QNRealTimeData;
 import com.yolanda.health.qnblesdk.bean.QNRemindMsg;
 import com.yolanda.health.qnblesdk.bean.QNSitRemind;
 import com.yolanda.health.qnblesdk.bean.QNSleep;
+import com.yolanda.health.qnblesdk.bean.QNSport;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
 import com.yolanda.health.qnblesdk.constant.QNBandExerciseType;
 import com.yolanda.health.qnblesdk.constant.QNHealthDataType;
@@ -61,12 +63,6 @@ public class WristSendUtils {
                         QNLogUtils.error("绑定状态，bindStatus=" + bindStatus);
                         if (bindStatus == 100) {
                             //可以进行命令的发送
-                            mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_SLEEP, new QNObjCallback<QNSleep>() {
-                                @Override
-                                public void onResult(QNSleep data, int code, String msg) {
-                                    //测试
-                                }
-                            });
                         }
                     }
 
@@ -168,12 +164,14 @@ public class WristSendUtils {
                 mBandManager.syncBandTime(new Date(), new QNResultCallback() {
                     @Override
                     public void onResult(int code, String msg) {
+                        QNLogUtils.error("同步手环时间", "code=" + code + ",msg=" + msg);
                         item.setErrorCode(code);
                         item.setErrorMsg("同步手环时间，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
                 });
+
             }
         });
 
@@ -530,7 +528,7 @@ public class WristSendUtils {
 
                     }
                 });
-             /*   mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_SPORT, new QNObjCallback<QNSport>() {
+               /* mBandManager.syncTodayHealthData(QNHealthDataType.HEALTH_DATA_TYPE_SPORT, new QNObjCallback<QNSport>() {
 
                     @Override
                     public void onResult(QNSport data, int code, String msg) {
@@ -863,4 +861,22 @@ public class WristSendUtils {
         return observable;
     }
 
+    public Observable<WristSettingItem> cancelBindBand(final WristSettingItem item) {
+        Observable<WristSettingItem> observable = Observable.create(new ObservableOnSubscribe<WristSettingItem>() {
+            @Override
+            public void subscribe(final ObservableEmitter<WristSettingItem> e) throws Exception {
+                mBandManager.cancelBindBand(new QNObjCallback<Boolean>() {
+                    @Override
+                    public void onResult(Boolean data, int code, String msg) {
+                        item.setErrorCode(code);
+                        item.setErrorMsg("取消绑定手环，结果为" + data + "," + msg);
+                        e.onNext(item);
+                        e.onComplete();
+                    }
+                });
+
+            }
+        });
+        return observable;
+    }
 }

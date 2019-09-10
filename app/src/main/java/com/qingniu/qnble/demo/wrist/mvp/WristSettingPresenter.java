@@ -62,6 +62,13 @@ public class WristSettingPresenter {
         bindItem.setType(WristSettingConst.SETTING_BUTTON);
         items.add(bindItem);
 
+        WristSettingItem cancelBindItem = new WristSettingItem();
+        cancelBindItem.setName("取消绑定手环");
+        cancelBindItem.setInfo("此方法是在绑定的过程中调用，用来取消绑定过程");
+        cancelBindItem.setType(WristSettingConst.SETTING_BUTTON);
+        items.add(cancelBindItem);
+
+
         WristSettingItem unbindItem = new WristSettingItem();
         unbindItem.setName("解绑手环");
         unbindItem.setInfo("不再使用此手环时，调用解绑手环的命令,解绑后手环会断开连接");
@@ -425,6 +432,9 @@ public class WristSettingPresenter {
                 break;
             case "绑定手环":
                 observable = mSendUtils.bindBand(item);
+                break;
+            case "取消绑定手环":
+                observable = mSendUtils.cancelBindBand(item);
                 break;
             case "解绑手环":
                 observable = mSendUtils.unbindBand(item);
