@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="qnwristsdk-1.0.0">
+  <library name="qnwristsdk-1.0.2">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/qnbandsdk/libs/qnwristsdk-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/qnbandsdk/libs/qnwristsdk-1.0.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
