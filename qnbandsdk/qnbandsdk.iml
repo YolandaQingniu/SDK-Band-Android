@@ -112,6 +112,7 @@
     <orderEntry type="library" exported="" scope="TEST" name="exposed-instrumentation-api-publish-0.5" level="project" />
     <orderEntry type="library" exported="" name="loader-28.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="rules-0.5" level="project" />
+    <orderEntry type="library" exported="" name="qnwristsdk-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="customview-28.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javax.annotation-api-1.2" level="project" />
@@ -120,7 +121,6 @@
     <orderEntry type="library" exported="" name="1_runtime-1.1.1" level="project" />
     <orderEntry type="library" exported="" name="drawerlayout-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="asynclayoutinflater-28.0.0" level="project" />
-    <orderEntry type="library" exported="" name="qnwristsdk-1.0.3" level="project" />
     <orderEntry type="library" exported="" name="common-1.1.1" level="project" />
     <orderEntry type="library" exported="" name="1_common-1.1.1" level="project" />
     <orderEntry type="library" exported="" name="viewpager-28.0.0" level="project" />
