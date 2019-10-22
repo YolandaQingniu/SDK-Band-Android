@@ -251,7 +251,7 @@ public class ScaleConnectActivity extends AppCompatActivity implements View.OnCl
                 if (electric == DecoderConst.NONE_BATTERY_VALUE) {//获取电量信息失败
                     return;
                 }
-                String text = "收到电池电量百分比:" + electric;
+                String text = getResources().getString(R.string.percentage_of_battery_received) + electric;
                 Log.d("ScaleConnectActivity", text);
                 Toast.makeText(ScaleConnectActivity.this, text, Toast.LENGTH_SHORT).show();
             }
@@ -339,59 +339,59 @@ public class ScaleConnectActivity extends AppCompatActivity implements View.OnCl
         String btnString;
         switch (bleStatus) {
             case QNDeviceStatus.STATE_CONNECTING: {
-                stateString = "正在连接";
-                btnString = "断开连接";
+                stateString = getResources().getString(R.string.connecting);
+                btnString = getResources().getString(R.string.disconnected);
                 mIsConnected = true;
                 break;
             }
             case QNDeviceStatus.STATE_CONNECTED: {
-                stateString = "已连接";
-                btnString = "断开连接";
+                stateString = getResources().getString(R.string.connected);
+                btnString = getResources().getString(R.string.disconnected);
                 mIsConnected = true;
                 break;
             }
             case QNDeviceStatus.STATE_DISCONNECTING: {
-                stateString = "正在断开连接";
-                btnString = "连接";
+                stateString = getResources().getString(R.string.disconnect_in_progress);
+                btnString = getResources().getString(R.string.connect);
                 mIsConnected = false;
 
                 break;
             }
             case QNDeviceStatus.STATE_LINK_LOSS: {
-                stateString = "连接已断开";
-                btnString = "连接";
+                stateString = getResources().getString(R.string.connection_disconnected);
+                btnString = getResources().getString(R.string.connect);
                 mIsConnected = false;
 
                 break;
             }
             case QNDeviceStatus.STATE_START_MEASURE: {
-                stateString = "正在测量";
-                btnString = "断开连接";
+                stateString = getResources().getString(R.string.measuring);
+                btnString =  getResources().getString(R.string.disconnected);
                 break;
             }
             case QNDeviceStatus.STATE_REAL_TIME: {
-                stateString = "正在测量实时体重";
-                btnString = "断开连接";
+                stateString = getResources().getString(R.string.real_time_weight_measurement);
+                btnString =  getResources().getString(R.string.disconnected);
                 break;
             }
             case QNDeviceStatus.STATE_BODYFAT: {
-                stateString = "正在测量阻抗";
-                btnString = "断开连接";
+                stateString = getResources().getString(R.string.impedance_measured);
+                btnString =  getResources().getString(R.string.disconnected);
                 break;
             }
             case QNDeviceStatus.STATE_HEART_RATE: {
-                stateString = "正在测量心率";
-                btnString = "断开连接";
+                stateString = getResources().getString(R.string.measuring_heart_rate);
+                btnString =  getResources().getString(R.string.disconnected);
                 break;
             }
             case QNDeviceStatus.STATE_MEASURE_COMPLETED: {
-                stateString = "测量完成";
-                btnString = "断开连接";
+                stateString = getResources().getString(R.string.measure_complete);
+                btnString = getResources().getString(R.string.disconnected);
                 break;
             }
             default: {
-                stateString = "连接已断开";
-                btnString = "连接";
+                stateString = getResources().getString(R.string.connection_disconnected);
+                btnString =  getResources().getString(R.string.connect);
                 mIsConnected = false;
                 break;
             }

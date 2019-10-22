@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="连接"/>
+            android:text="@string/connect"/>
 
         <TextView
             android:id="@+id/statusTv"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="未连接"/>
+            android:text="@string/disconnected"/>
 
         <TextView
             android:id="@+id/back_tv"
@@ -33,14 +33,14 @@
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:padding="8dp"
-            android:text="返回"/>
+            android:text="@string/back"/>
 
     </LinearLayout>
     <View
         style="@style/divide_line"/>
     <TextView
         android:layout_width="match_parent"
-        android:text="OTA升级"
+        android:text="@string/ota_update"
         android:layout_marginLeft="10dp"
         android:layout_height="wrap_content" />
     <LinearLayout
@@ -52,7 +52,7 @@
             android:id="@+id/fileSelectBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="选择文件" />
+            android:text="@string/select_file" />
 
         <TextView
             android:id="@+id/filePath"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:text="开始升级" />
+            android:text="@string/start_update" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.qingniu.qnble.demo.R;
+import com.qingniu.qnble.demo.adapter.WristSettingAdapter;
 import com.qingniu.qnble.demo.bean.User;
 import com.qingniu.qnble.demo.bean.WristSettingItem;
 import com.qingniu.qnble.demo.constant.WristSettingConst;
@@ -104,7 +105,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
     private boolean isReady;
 
 
-    private com.qingniu.qnble.demo.adapter.WristSettingAdapter settingAdapter;
+    private WristSettingAdapter settingAdapter;
 
     private List<WristSettingItem> mItems = new ArrayList<>();
 
@@ -121,22 +122,22 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         mUser = getIntent().getParcelableExtra(UserConst.USER);
         mWristDevice = getIntent().getParcelableExtra(UserConst.DEVICE);
 
-        presenter = new WristSettingPresenter(this);
+        presenter = new WristSettingPresenter(this,this);
 
         buildQNUser();
         initBleState();
         initWristData();
 
-        settingAdapter = new com.qingniu.qnble.demo.adapter.WristSettingAdapter(this, mItems, presenter);
-        settingAdapter.setOnItemClickListen(new com.qingniu.qnble.demo.adapter.WristSettingAdapter.WristSettingListener() {
+        settingAdapter = new WristSettingAdapter(this, mItems, presenter);
+        settingAdapter.setOnItemClickListen(new WristSettingAdapter.WristSettingListener() {
             @Override
             public void onItemClick(int position, WristSettingItem item) {
                 if (!isReady) {
-                    ToastMaker.show(WristConnectActivity.this, "需要等手环准备好之后才能开始交互");
+                    ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.hint_message));
                     return;
                 }
                 if (!isConnected) {
-                    ToastMaker.show(WristConnectActivity.this, "手环未连接，请先连接手环！");
+                    ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.hint_message1));
                     return;
                 }
                 presenter.sendCmd(position, item);
@@ -156,7 +157,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         WristDataListenerManager.getInstance().setListener(mListener);
 
         //设置手环通知
-        mQNBleApi.getBandManager().setBandServiceInfo("WILL GO自定义标题", "WILL GO自定义内容", new QNResultCallback() {
+        mQNBleApi.getBandManager().setBandServiceInfo(getResources().getString(R.string.customer_title), getResources().getString(R.string.customer_content), new QNResultCallback() {
             @Override
             public void onResult(int code, String msg) {
                 QNLogUtils.error("setBandServiceInfo", "code=" + code + ",msg=" + msg);
@@ -178,27 +179,27 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         mQNBleApi.getBandManager().setEventListener(new QNBandEventListener() {
             @Override
             public void onTakePhotos(QNBleDevice device) {
-                ToastMaker.show(WristConnectActivity.this, "触发拍照");
+                ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.trigger_pictures));
             }
 
             @Override
             public void onFindPhone(QNBleDevice device) {
-                ToastMaker.show(WristConnectActivity.this, "触发寻找手机");
+                ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.trigger_find_phone));
             }
 
             @Override
             public void onStopFindPhone(QNBleDevice device) {
-                ToastMaker.show(WristConnectActivity.this, "触发停止寻找手机");
+                ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.trigger_stop_find_phone));
             }
 
             @Override
             public void onHangUpPhone(QNBleDevice device) {
-                ToastMaker.show(WristConnectActivity.this, "挂断来电");
+                ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.hang_up_phone));
             }
 
             @Override
             public void onExciseStatus(int exerciseStatus, int exerciseType, QNBleDevice device) {
-                ToastMaker.show(WristConnectActivity.this, "设备返回的修改的运动锻炼状态");
+                ToastMaker.show(WristConnectActivity.this,getResources().getString(R.string.device_returns_modified_exercise_status));
                 //手机需要回复设备信息是否成功
                 mQNBleApi.getBandManager().confirmBandModifyExerciseStatus(true, exerciseStatus, exerciseType, new QNResultCallback() {
                     @Override
@@ -219,7 +220,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         mQNBleApi.setBleConnectionChangeListener(new QNBleConnectionChangeListener() {
             @Override
             public void onConnecting(QNBleDevice device) {
-                statusTv.setText("手环正在连接");
+                statusTv.setText(getResources().getString(R.string.wrist_connecting));
             }
 
             @Override
@@ -227,7 +228,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
                 //如果连接了手环也连接了秤，需要进行校验
                 if (device.getMac().equals(mWristDevice.getMac())) {
                     isConnected = true;
-                    statusTv.setText("手环已连接");
+                    statusTv.setText(getResources().getString(R.string.wrist_connected));
                 }
             }
 
@@ -239,20 +240,20 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
             @Override
             public void onDisconnecting(QNBleDevice device) {
                 isConnected = false;
-                statusTv.setText("手环正在断开连接");
+                statusTv.setText(getResources().getString(R.string.wrist_disconnecting));
             }
 
             @Override
             public void onDisconnected(QNBleDevice device) {
                 isConnected = false;
                 isReady = false;
-                statusTv.setText("手环断开连接");
+                statusTv.setText(getResources().getString(R.string.wrist_disconnected));
             }
 
             @Override
             public void onConnectError(QNBleDevice device, int errorCode) {
                 isConnected = false;
-                statusTv.setText("手环连接异常");
+                statusTv.setText(getResources().getString(R.string.wrist_connect_exception));
                 Log.d(TAG, "onConnectError：" + errorCode);
             }
 
@@ -264,6 +265,25 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
                         isReady = true;
                         QNBandManager bandManager = mQNBleApi.getBandManager();
                         presenter.setBandManager(bandManager);
+                        /*bandManager.bindBand("123456789", new QNBindResultCallback() {
+                            @Override
+                            public void onStatusResult(int bindStatus) {
+                                QNLogUtils.error("绑定状态，bindStatus=" + bindStatus);
+                                if (bindStatus == 100) {
+                                    //可以进行命令的发送
+                                }
+                            }
+
+                            @Override
+                            public void onConfirmBind() {
+                                QNLogUtils.error("请确认弹窗");
+                            }
+
+                            @Override
+                            public void onResult(int code, String msg) {
+                                QNLogUtils.error("绑定状态，onResult=" + msg);
+                            }
+                        });*/
                     }
                 }
             }
@@ -310,11 +330,11 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
         switch (view.getId()) {
             case R.id.connectBtn:
                 if (!canConnect) {
-                    ToastMaker.show(WristConnectActivity.this, "构建手环用户失败");
+                    ToastMaker.show(WristConnectActivity.this,getResources().getString(R.string.build_wrist_user_fail));
                     return;
                 }
                 if (isConnected) {
-                    ToastMaker.show(WristConnectActivity.this, "手环已经连接了");
+                    ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.wrist_connected));
                     return;
                 }
                 mQNBleApi.connectDevice(mWristDevice, qnUser, new QNResultCallback() {
@@ -356,11 +376,11 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
                 break;
             case R.id.otaBtn:
                 if (!isReady) {
-                    ToastMaker.show(WristConnectActivity.this, "需要等手环准备好之后才能开始交互");
+                    ToastMaker.show(WristConnectActivity.this, getResources().getString(R.string.hint_message));
                     return;
                 }
                 if (TextUtils.isEmpty(filePath.getText().toString())) {
-                    ToastMaker.show(this, "请先选择升级的Bin文件");
+                    ToastMaker.show(this, getResources().getString(R.string.select_update_file));
                 } else {
                     QNBleApi.getInstance(this).getBandManager().startDfu(filePath.getText().toString(), new QNDfuProgressCallback() {
                         @Override

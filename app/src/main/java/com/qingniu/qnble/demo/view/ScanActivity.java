@@ -144,7 +144,7 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onStopScan() {
                 QNLogUtils.log("ScanActivity", "onStopScan");
-                ToastMaker.show(ScanActivity.this, "已经停止扫描");
+                ToastMaker.show(ScanActivity.this,getResources().getString(R.string.scan_stopped));
                 isScanning = false;
 
             }
@@ -153,7 +153,7 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onScanFail(int code) {
                 isScanning = false;
                 QNLogUtils.log("ScanActivity", "onScanFail:" + code);
-                Toast.makeText(ScanActivity.this, "扫描异常，请重启手机蓝牙!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScanActivity.this, getResources().getString(R.string.scan_exception)+":"+code, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -247,7 +247,7 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
                     listAdapter.notifyDataSetChanged();
                     startScan();
                 } else {
-                    ToastMaker.show(this, "正在扫描");
+                    ToastMaker.show(this, getResources().getString(R.string.scanning));
                 }
                 break;
             case R.id.stopBtn:
@@ -263,9 +263,9 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
         if (requestCode == AndroidPermissionCenter.REQUEST_EXTERNAL_STORAGE) {
             for (int i = 0; i < permissions.length; i++) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + getResources().getString(R.string.permission) + permissions[i] + getResources().getString(R.string.apply_for_to_success), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + getResources().getString(R.string.permission)  + permissions[i] + getResources().getString(R.string.apply_for_to_fail), Toast.LENGTH_SHORT).show();
                 }
             }
         }

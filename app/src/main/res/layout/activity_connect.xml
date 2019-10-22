@@ -38,7 +38,7 @@
             android:layout_marginStart="10dp"
             android:padding="8dp"
             android:id="@+id/back_tv"
-            android:text="返回"/>
+            android:text="@string/back"/>
 
     </LinearLayout>
 

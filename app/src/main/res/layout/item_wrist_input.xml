@@ -42,7 +42,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/item_arrow_iv"
-            android:text="发送"/>
+            android:text="@string/send"/>
 
         <ImageView
             android:id="@+id/item_arrow_iv"

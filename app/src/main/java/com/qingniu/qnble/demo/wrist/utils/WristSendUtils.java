@@ -1,7 +1,9 @@
 package com.qingniu.qnble.demo.wrist.utils;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.qingniu.qnble.demo.R;
 import com.qingniu.qnble.demo.bean.WristSettingItem;
 import com.qingniu.qnble.utils.QNLogUtils;
 import com.qingniu.wrist.constant.QNExerciseStatus;
@@ -12,12 +14,9 @@ import com.yolanda.health.qnblesdk.bean.QNBandMetrics;
 import com.yolanda.health.qnblesdk.bean.QNCleanInfo;
 import com.yolanda.health.qnblesdk.bean.QNExercise;
 import com.yolanda.health.qnblesdk.bean.QNExerciseData;
-import com.yolanda.health.qnblesdk.bean.QNHeartRate;
 import com.yolanda.health.qnblesdk.bean.QNRealTimeData;
 import com.yolanda.health.qnblesdk.bean.QNRemindMsg;
 import com.yolanda.health.qnblesdk.bean.QNSitRemind;
-import com.yolanda.health.qnblesdk.bean.QNSleep;
-import com.yolanda.health.qnblesdk.bean.QNSport;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
 import com.yolanda.health.qnblesdk.constant.QNBandExerciseType;
 import com.yolanda.health.qnblesdk.constant.QNHealthDataType;
@@ -45,9 +44,11 @@ public class WristSendUtils {
 
     private QNBandManager mBandManager;
     private String userId = "123456789";
+    private Context mContext;
 
-    public WristSendUtils(QNBandManager qnBandManager) {
+    public WristSendUtils(QNBandManager qnBandManager, Context context) {
         this.mBandManager = qnBandManager;
+        this.mContext = context;
     }
 
     /**
@@ -74,7 +75,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("绑定手环，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.bind_wrist)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -97,7 +98,7 @@ public class WristSendUtils {
                     public void onResult(Boolean data, int code, String msg) {
                         item.setChecked(data);
                         item.setErrorCode(code);
-                        item.setErrorMsg("解绑手环，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.unbind_wrist)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -120,7 +121,7 @@ public class WristSendUtils {
                     public void onResult(Boolean data, int code, String msg) {
                         item.setChecked(data);
                         item.setErrorCode(code);
-                        item.setErrorMsg("校验手环绑定的手机" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.verify_binding_phone) + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -143,7 +144,7 @@ public class WristSendUtils {
                     public void onResult(QNBandInfo data, int code, String msg) {
                         Log.d(TAG, "QNBandInfo:" + data);
                         item.setErrorCode(code);
-                        item.setErrorMsg("获取手环信息" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.get_wrist_info) + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -166,7 +167,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         QNLogUtils.error("同步手环时间", "code=" + code + ",msg=" + msg);
                         item.setErrorCode(code);
-                        item.setErrorMsg("同步手环时间，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.sync_time)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -189,7 +190,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置闹钟，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.set_alarm)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -216,7 +217,7 @@ public class WristSendUtils {
                 }
                 if (stepGoal == 0) {
                     item.setErrorCode(-1);
-                    item.setErrorMsg("设置的步数目标数据错误");
+                    item.setErrorMsg(mContext.getResources().getString(R.string.setting_step_target_data_error));
                     e.onNext(item);
                     e.onComplete();
                     return;
@@ -269,7 +270,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置手环度量，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.set_metro)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -291,7 +292,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置手环久坐提醒，" + msg);
+                        item.setErrorMsg(mContext.getString(R.string.sedentary_remind_hint)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -314,7 +315,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置心率监测模式，" + msg);
+                        item.setErrorMsg(mContext.getString(R.string.heart_rate_monitoring_mode)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -337,7 +338,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置寻找手机，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.trigger_find_phone)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -360,7 +361,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置拍照，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.shut)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -383,7 +384,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置抬腕识别是否开启，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.wrist_lifting_identification_hint)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -406,7 +407,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置清除手环设置，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.set_clear_wris_settings)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -429,7 +430,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("重启手环，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.reboot_wrist)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -452,7 +453,7 @@ public class WristSendUtils {
                     public void onResult(int code, String msg) {
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("快捷设置手环基础配置" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.quickly_set_wrist_base_settings) + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -476,7 +477,7 @@ public class WristSendUtils {
 
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("获取实时数据" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.get_real_time_data) + msg);
                         item.setValue(null != data ? data.toString() : "[]");
                         e.onNext(item);
                         e.onComplete();
@@ -733,14 +734,14 @@ public class WristSendUtils {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                     item.setErrorCode(-1);
-                    item.setErrorMsg("未设置心率间隔");
+                    item.setErrorMsg(mContext.getResources().getString(R.string.not_set_heart_rate_interval));
                     e.onNext(item);
                     e.onComplete();
                     return;
                 }
                 if (interval == 0) {
                     item.setErrorCode(-1);
-                    item.setErrorMsg("设置的心率间隔数据错误");
+                    item.setErrorMsg(mContext.getResources().getString(R.string.dat1_set_heart_rate_interval));
                     e.onNext(item);
                     e.onComplete();
                     return;
@@ -775,13 +776,13 @@ public class WristSendUtils {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                     item.setErrorCode(-1);
-                    item.setErrorMsg("设置的心率提醒数据错误");
+                    item.setErrorMsg(mContext.getResources().getString(R.string.data_set_heart_rate_remind));
                     e.onNext(item);
                     e.onComplete();
                 }
                 if (remindValue == 0) {
                     item.setErrorCode(-1);
-                    item.setErrorMsg("设置的心率提醒数据错误");
+                    item.setErrorMsg(mContext.getResources().getString(R.string.data_set_heart_rate_remind));
                     e.onNext(item);
                     e.onComplete();
                     return;
@@ -817,7 +818,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("设置跑步状态，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.set_runnig_status)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -850,7 +851,7 @@ public class WristSendUtils {
                         }
                         item.setChecked(code == CheckStatus.OK.getCode());
                         item.setErrorCode(code);
-                        item.setErrorMsg("发送跑步数据，" + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.send_running_data)+"，" + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
@@ -869,7 +870,7 @@ public class WristSendUtils {
                     @Override
                     public void onResult(Boolean data, int code, String msg) {
                         item.setErrorCode(code);
-                        item.setErrorMsg("取消绑定手环，结果为" + data + "," + msg);
+                        item.setErrorMsg(mContext.getResources().getString(R.string.cancel_bind_wirst_result) + data + "," + msg);
                         e.onNext(item);
                         e.onComplete();
                     }
