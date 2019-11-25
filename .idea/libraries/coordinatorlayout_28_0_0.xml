@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="coordinatorlayout-28.0.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/b35f90ec1389c3169129cedbb1c603b7829e4504/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/b35f90ec1389c3169129cedbb1c603b7829e4504/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/c23817ebdbbc421f83be4cc7aa656efe1bd74c51/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c23817ebdbbc421f83be4cc7aa656efe1bd74c51/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

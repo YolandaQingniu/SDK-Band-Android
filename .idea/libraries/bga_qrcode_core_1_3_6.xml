@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="bga-qrcode-core-1.3.6">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/63d1c88a2e3bbe96c24c93712fa0fd2f56f3bb70/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/63d1c88a2e3bbe96c24c93712fa0fd2f56f3bb70/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/01acafccc551aa5e974373572f94f20e3ab7a631/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/01acafccc551aa5e974373572f94f20e3ab7a631/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
