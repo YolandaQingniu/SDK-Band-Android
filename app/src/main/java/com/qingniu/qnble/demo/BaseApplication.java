@@ -3,10 +3,10 @@ package com.qingniu.qnble.demo;
 import android.app.Application;
 import android.util.Log;
 
-import com.qingniu.qnble.utils.QNLogUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.yolanda.health.qnblesdk.listener.QNResultCallback;
 import com.yolanda.health.qnblesdk.out.QNBleApi;
+import com.yolanda.health.qnblesdk.utils.QNSDKLogUtils;
 
 /**
  * @author: hekang
@@ -15,9 +15,6 @@ import com.yolanda.health.qnblesdk.out.QNBleApi;
  */
 
 public class BaseApplication extends Application {
-
-    public String mAppId = "123456789";
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -25,7 +22,6 @@ public class BaseApplication extends Application {
         CrashReport.initCrashReport(this, "6a73b451c5", false);
 //        String encryptPath = "file:///android_asset/hzrc20181205.qn";
         String encryptPath = "file:///android_asset/testEncrypt.txt";
-//        String encryptPath = "file:///android_asset/bdjk20180921.qn";
 //        String encryptPath = "file:///android_asset/lzwn.qn";
 //        String encryptPath = "file:///android_asset/szzskjyxgs2018.qn";
 //        String encryptPath = "file:///android_asset/jmjkyfwyxgs2017052341.qn";
@@ -39,9 +35,12 @@ public class BaseApplication extends Application {
 //        String encryptPath = "file:///android_asset/hzyb20160314175503.qn";
 //        String encryptPath = "file:///android_asset/mryj20180611.qn";
 //        String encryptPath = "file:///android_asset/rdkj20180809.qn";
-        QNLogUtils.setLogEnable(true);
+        //是否开启打印日志
+        QNSDKLogUtils.setLogEnable(true);
+        //是否开启写入日志
+        QNSDKLogUtils.setWriteEnable(true);
         QNBleApi mQNBleApi = QNBleApi.getInstance(this);
-        mQNBleApi.initSdk(mAppId, encryptPath, new QNResultCallback() {
+        mQNBleApi.initSdk("123456789", encryptPath, new QNResultCallback() {
             @Override
             public void onResult(int code, String msg) {
                 Log.d("BaseApplication", "初始化文件" + msg);

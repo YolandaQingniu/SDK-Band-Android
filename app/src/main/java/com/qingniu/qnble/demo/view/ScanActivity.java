@@ -1,11 +1,14 @@
 package com.qingniu.qnble.demo.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +16,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qingniu.qnble.demo.BaseApplication;
 import com.qingniu.qnble.demo.R;
-import com.qingniu.qnble.demo.SettingActivity;
 import com.qingniu.qnble.demo.bean.Config;
 import com.qingniu.qnble.demo.bean.User;
+import com.qingniu.qnble.demo.picker.WIFISetDialog;
 import com.qingniu.qnble.demo.util.AndroidPermissionCenter;
 import com.qingniu.qnble.demo.util.ToastMaker;
 import com.qingniu.qnble.demo.util.UserConst;
@@ -29,11 +34,21 @@ import com.qingniu.qnble.demo.wrist.WristConnectActivity;
 import com.qingniu.qnble.utils.QNLogUtils;
 import com.qingniu.wrist.constant.WristType;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
+import com.yolanda.health.qnblesdk.constant.QNDeviceType;
+import com.yolanda.health.qnblesdk.constant.QNIndicator;
+import com.yolanda.health.qnblesdk.constant.UserGoal;
+import com.yolanda.health.qnblesdk.constant.UserShape;
 import com.yolanda.health.qnblesdk.listener.QNBleDeviceDiscoveryListener;
 import com.yolanda.health.qnblesdk.listener.QNResultCallback;
 import com.yolanda.health.qnblesdk.out.QNBleApi;
+import com.yolanda.health.qnblesdk.out.QNBleBroadcastDevice;
 import com.yolanda.health.qnblesdk.out.QNBleDevice;
+import com.yolanda.health.qnblesdk.out.QNBleKitchenDevice;
 import com.yolanda.health.qnblesdk.out.QNConfig;
+import com.yolanda.health.qnblesdk.out.QNShareData;
+import com.yolanda.health.qnblesdk.out.QNUser;
+import com.yolanda.health.qnblesdk.out.QNUtils;
+import com.yolanda.health.qnblesdk.out.QNWiFiConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,16 +74,42 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
     @BindView(R.id.listView)
     ListView mListView;
 
+    @BindView(R.id.qr_data_et)
+    EditText qr_data_et;
+    @BindView(R.id.qr_time_et)
+    EditText qr_time_et;
+    @BindView(R.id.qr_data_tv)
+    TextView qr_data_tv;
+    @BindView(R.id.scanQrcode)
+    Button scanQrcode;
+    @BindView(R.id.nameTv)
+    TextView nameTv;
+    @BindView(R.id.modelTv)
+    TextView modelTv;
+    @BindView(R.id.macTv)
+    TextView macTv;
+    @BindView(R.id.rssiTv)
+    TextView rssiTv;
+    @BindView(R.id.lvHeadLay)
+    LinearLayout lvHeadLay;
+    @BindView(R.id.qr_test_btn)
+    Button qrTestBtn;
+    @BindView(R.id.kitchenBtn)
+    Button kitchenBtn;
+
     private QNBleApi mQNBleApi;
     private User mUser;
     private Config mConfig;
     private boolean isScanning;
+    private WIFISetDialog wifiSetDialog;
 
     public static Intent getCallIntent(Context context, User user, Config mConfig) {
         return new Intent(context, ScanActivity.class)
                 .putExtra(UserConst.CONFIG, mConfig)
                 .putExtra(UserConst.USER, user);
     }
+
+    private static final String TAG = "ScanActivity";
 
     private BaseAdapter listAdapter = new BaseAdapter() {
         @Override
@@ -95,6 +136,7 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
             TextView modelTv = (TextView) convertView.findViewById(R.id.modelTv);
             TextView macTv = (TextView) convertView.findViewById(R.id.macTv);
             TextView rssiTv = (TextView) convertView.findViewById(R.id.rssiTv);
+            ImageView deviceType = convertView.findViewById(R.id.deviceType);
 
             QNBleDevice scanResult = devices.get(position);
 
@@ -102,6 +144,11 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
             modelTv.setText(scanResult.getModeId());
             macTv.setText(scanResult.getMac());
             rssiTv.setText(String.valueOf(scanResult.getRssi()));
+            if (scanResult.isSupportWifi()) {
+                deviceType.setImageResource(R.drawable.wifi_icon);
+            } else {
+                deviceType.setImageResource(R.drawable.system_item_arrow);
+            }
 
 
             return convertView;
@@ -128,6 +175,37 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
 
         mListView.setOnItemClickListener(this);
 
+
+    }
+
+    private void initData() {
+        mScanAppid.setText("UserId : " + mUser.getUserId());
+        QNConfig mQnConfig = mQNBleApi.getConfig();//获取上次设置的对象,未设置获取的是默认对象
+        mQnConfig.setAllowDuplicates(mConfig.isAllowDuplicates());
+        mQnConfig.setDuration(mConfig.getDuration());
+        //此API已废弃
+        // mQnConfig.setScanOutTime(mConfig.getScanOutTime());
+        mQnConfig.setConnectOutTime(mConfig.getConnectOutTime());
+        mQnConfig.setUnit(mConfig.getUnit());
+        mQnConfig.setOnlyScreenOn(mConfig.isOnlyScreenOn());
+        /**
+         * 强化广播秤信号，此选项只对广播秤有效
+         */
+        mQnConfig.setEnhanceBleBroadcast(mConfig.isEnhanceBleBroadcast());
+        //设置扫描对象
+        mQnConfig.save(new QNResultCallback() {
+            @Override
+            public void onResult(int i, String s) {
+                Log.d("ScanActivity", "initData:" + s);
+            }
+        });
+        wifiSetDialog = new WIFISetDialog(ScanActivity.this);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mQNBleApi.setBleDeviceDiscoveryListener(new QNBleDeviceDiscoveryListener() {
             @Override
             public void onDeviceDiscover(QNBleDevice device) {
@@ -144,42 +222,28 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onStopScan() {
                 QNLogUtils.log("ScanActivity", "onStopScan");
-                ToastMaker.show(ScanActivity.this,getResources().getString(R.string.scan_stopped));
                 isScanning = false;
-
+                ToastMaker.show(ScanActivity.this, getResources().getString(R.string.scan_stopped));
             }
 
             @Override
             public void onScanFail(int code) {
                 isScanning = false;
                 QNLogUtils.log("ScanActivity", "onScanFail:" + code);
-                Toast.makeText(ScanActivity.this, getResources().getString(R.string.scan_exception)+":"+code, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScanActivity.this, getResources().getString(R.string.scan_exception) + ":" + code, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScanActivity.this, getResources().getString(R.string.scan_exception) + ":" + code, Toast.LENGTH_SHORT).show();
             }
-        });
 
-    }
-
-    private void initData() {
-        mScanAppid.setText("AppId : " + BaseApplication.getInstance().mAppId);
-        QNConfig mQnConfig = mQNBleApi.getConfig();//获取上次设置的对象,未设置获取的是默认对象
-        mQnConfig.setAllowDuplicates(mConfig.isAllowDuplicates());
-        mQnConfig.setDuration(mConfig.getDuration());
-        mQnConfig.setScanOutTime(mConfig.getScanOutTime());
-        mQnConfig.setConnectOutTime(mConfig.getConnectOutTime());
-        mQnConfig.setUnit(mConfig.getUnit());
-        mQnConfig.setOnlyScreenOn(mConfig.isOnlyScreenOn());
-        //设置扫描对象
-        mQnConfig.save(new QNResultCallback() {
             @Override
-            public void onResult(int i, String s) {
-                Log.d("ScanActivity", "initData:" + s);
+            public void onBroadcastDeviceDiscover(QNBleBroadcastDevice device) {
+                //广播秤专用,具体使用参考 BroadcastScaleActivity
+            }
+
+            @Override
+            public void onKitchenDeviceDiscover(QNBleKitchenDevice device) {
+                //厨房秤专用，具体使用参考 KitchenScaleActivity
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -195,10 +259,14 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     private void startScan() {
+
         mQNBleApi.startBleDeviceDiscovery(new QNResultCallback() {
             @Override
             public void onResult(int code, String msg) {
                 Log.d("ScanActivity", "code:" + code + ";msg:" + msg);
+                if (code != CheckStatus.OK.getCode()) {
+                    ToastMaker.show(ScanActivity.this, code + ":" + msg);
+                }
             }
         });
     }
@@ -220,9 +288,33 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
         stopScan();
-        QNBleDevice device = this.devices.get(position);
-        //连接设备
-        connectDevice(device);
+        final QNBleDevice device = this.devices.get(position);
+        if (device.isSupportWifi()) {
+            wifiSetDialog.setDialogClickListener(new WIFISetDialog.DialogClickListener() {
+                @Override
+                public void confirmClick(String ssid, String pwd) {
+                    Log.e(TAG, "ssid：" + ssid);
+                    startActivity(ScaleConnectActivity.getCallIntent(ScanActivity.this, mUser, device, new QNWiFiConfig(ssid, pwd)));
+                    wifiSetDialog.dismiss();
+                }
+
+                @Override
+                public void cancelClick() {
+
+                }
+            });
+            wifiSetDialog.show();
+        } else {
+            // SCALE_BROADCAST
+            if (device.getDeviceType() == QNDeviceType.SCALE_BROADCAST) {
+                startActivity(BroadcastScaleActivity.getCallIntent(ScanActivity.this, mUser, device));
+            } else if (device.getDeviceType() == QNDeviceType.SCALE_KITCHEN) {// SCALE_KITCHEN
+
+            } else {//SCALE_BLE_DEFAULT
+                //连接设备
+                connectDevice(device);
+            }
+        }
     }
 
     private void connectDevice(QNBleDevice device) {
@@ -233,9 +325,18 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    @OnClick({R.id.scan_setting, R.id.scanBtn, R.id.stopBtn})
+    @OnClick({R.id.scan_setting, R.id.scanBtn, R.id.stopBtn, R.id.qr_test_btn, R.id.scanQrcode, R.id.kitchenBtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.scanQrcode:
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    startActivityForResult(new Intent(ScanActivity.this, ScanQrActivity.class), 100);
+                } else {
+                    AndroidPermissionCenter.verifyCameraPermissions(this);
+                }
+                break;
             case R.id.scan_setting:
                 startActivity(SettingActivity.getCallIntent(this));
                 finish();
@@ -254,7 +355,98 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
                 stopScan();
 
                 break;
+            case R.id.qr_test_btn:
+                String qrcode = qr_data_et.getText().toString().trim();
+                long validSecond = -1L;
+                try {
+                    String qrValid = qr_time_et.getText().toString().trim();
+                    validSecond = Long.parseLong(qrValid);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (validSecond == -1) {
+                    ToastMaker.show(this, getString(R.string.input_date_time));
+                    return;
+                }
+                QNShareData qnShareData = QNUtils.decodeShareData(qrcode, validSecond, createQNUser(), new QNResultCallback() {
+                    @Override
+                    public void onResult(int code, String msg) {
+                        QNLogUtils.log(TAG, "code:" + code);
+                    }
+                });
+                String result = getResources().getString(R.string.decode_fail);
+                if (qnShareData != null) {
+                    result = "qnShareData--sn：" + qnShareData.getSn() +
+                            ";\nweight:" + qnShareData.getQNScaleData().getItemValue(QNIndicator.TYPE_WEIGHT) +
+                            ";\nfat:" + qnShareData.getQNScaleData().getItemValue(QNIndicator.TYPE_BODYFAT);
+
+                }
+                qr_data_tv.setText(result);
+                break;
+            case R.id.kitchenBtn:
+                startActivity(kitchenScaleActivity.getCallIntent(ScanActivity.this));
+                break;
         }
+    }
+
+    private QNUser createQNUser() {
+        UserShape userShape;
+        switch (mUser.getChoseShape()) {
+            case 0:
+                userShape = UserShape.SHAPE_NONE;
+                break;
+            case 1:
+                userShape = UserShape.SHAPE_SLIM;
+                break;
+            case 2:
+                userShape = UserShape.SHAPE_NORMAL;
+                break;
+            case 3:
+                userShape = UserShape.SHAPE_STRONG;
+                break;
+            case 4:
+                userShape = UserShape.SHAPE_PLIM;
+                break;
+            default:
+                userShape = UserShape.SHAPE_NONE;
+                break;
+        }
+
+        UserGoal userGoal;
+        switch (mUser.getChoseGoal()) {
+            case 0:
+                userGoal = UserGoal.GOAL_NONE;
+                break;
+            case 1:
+                userGoal = UserGoal.GOAL_LOSE_FAT;
+                break;
+            case 2:
+                userGoal = UserGoal.GOAL_STAY_HEALTH;
+                break;
+            case 3:
+                userGoal = UserGoal.GOAL_GAIN_MUSCLE;
+                break;
+            case 4:
+                userGoal = UserGoal.POWER_OFTEN_EXERCISE;
+                break;
+            case 5:
+                userGoal = UserGoal.POWER_LITTLE_EXERCISE;
+                break;
+            case 6:
+                userGoal = UserGoal.POWER_OFTEN_RUN;
+                break;
+            default:
+                userGoal = UserGoal.GOAL_NONE;
+                break;
+        }
+
+        return mQNBleApi.buildUser(mUser.getUserId(),
+                mUser.getHeight(), mUser.getGender(), mUser.getBirthDay(), mUser.getAthleteType(), userShape, userGoal, new QNResultCallback() {
+                    @Override
+                    public void onResult(int code, String msg) {
+                        Log.d("ConnectActivity", "创建用户信息返回:" + msg);
+                    }
+                });
     }
 
     @Override
@@ -265,9 +457,32 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "" + getResources().getString(R.string.permission) + permissions[i] + getResources().getString(R.string.apply_for_to_success), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "" + getResources().getString(R.string.permission)  + permissions[i] + getResources().getString(R.string.apply_for_to_fail), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + getResources().getString(R.string.permission) + permissions[i] + getResources().getString(R.string.apply_for_to_fail), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + getResources().getString(R.string.permission) + permissions[i] + getResources().getString(R.string.apply_for_to_fail), Toast.LENGTH_SHORT).show();
                 }
+            }
+        } else if (requestCode == AndroidPermissionCenter.REQUEST_CAMERA) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startActivityForResult(new Intent(ScanActivity.this, ScanQrActivity.class), 100);
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            if (resultCode == 200) {
+                String qrCode = data.getStringExtra("code").trim();
+                Log.e(TAG, "二维码：" + qrCode);
+                if (!TextUtils.isEmpty(qrCode)) {
+                    qr_data_et.setText(qrCode);
+                } else {
+                    //
+                }
+
+            }
+        }
+    }
+
 }

@@ -547,7 +547,7 @@ public class NumberPicker extends LinearLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(layoutResId, this, true);
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
+        OnClickListener onClickListener = new OnClickListener() {
             public void onClick(View v) {
                 hideSoftInput();
                 mInputText.clearFocus();
