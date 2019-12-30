@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion MIN_SDK_VERSION as int
         targetSdkVersion TARGET_SDK_VERSION as int
-        applicationId "com.qingniu.health.demo"
+        applicationId "com.qingniu.health.wrist.demo"
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
