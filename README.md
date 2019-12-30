@@ -19,16 +19,16 @@
    ```
 * 在你的module的根目录下的**build.gradle**添加依赖
 	```
-	<!--这里的版本号，1.0.6 可以指定为任意release版本-->
-	<!--如果希望一直使用最新版本可以替换 1.0.6 为 master-SNAPSHOT -->
+	<!--这里的版本号，1.0.9 可以指定为任意release版本-->
+	<!--如果希望一直使用最新版本可以替换 1.0.9 为 master-SNAPSHOT -->
 	dependencies {
 	        ...
-	        compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.6'
+	        compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.9'
 	}
 	```
 	
 ### Eclipse
-* 下载最新的[jar和so库](https://github.com/YolandaQingniu/SDK-Band-Android/releases/download/1.0.6/qnwristsdk-1.0.6-Android.zip)，导入下载的`jar和so库`
+* 下载最新的[jar和so库](https://github.com/YolandaQingniu/SDK-Band-Android/releases/download/1.0.9/qnwristsdk-1.0.9-Android.zip)，导入下载的`jar和so库`
 * 在清单文件中申请蓝牙权限、位置权限、网络权限（离线SDK不需要）
     ```
    <!--蓝牙权限-->
@@ -42,16 +42,23 @@
    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
    <!--如果是在线的sdk需要网络权限-->
    <uses-permission android:name="android.permission.INTERNET" />
-   <!-- 前台服务权限，防止应用退到后台手环断开连接-->
+   <!-- 前台服务权限，防止应用退到后台手环断开连接，1.0.9 之前版本需要，1.0.9之后不需要-->
    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-
+    <!-- 1.0.9 之前版本不需要，1.0.9之后需要-->
+   <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     ```
 * 需要在**AndroidManifest.xml**注册SDK中的组件：
- 	``` 
+ 	```
+ 	<!-- 1.0.9 之前版本配置-->
    <service android:name="com.qingniu.qnble.scanner.BleScanService"/>
    <service android:name="com.qingniu.wrist.ble.WristBleService"/>
-   ```   
+   ```
+    	```
+    <!-- 1.0.9 之后版本（包含1.0.9版本）配置-->
+     <service android:name="com.qingniu.qnble.scanner.BleScanService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+     <service android:name="com.qingniu.wrist.ble.WristBleService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+      ```
 * SDK中使用到了v4包的资源，开发者项目中需要引入v4包的资源
 
 ## 注意事项
