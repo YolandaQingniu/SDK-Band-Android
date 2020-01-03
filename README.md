@@ -53,15 +53,24 @@
     ```
 * 需要在**AndroidManifest.xml**注册SDK中的组件：
  	```
+
  	<!-- 1.0.9 之前版本配置-->
    <service android:name="com.qingniu.qnble.scanner.BleScanService"/>
    <service android:name="com.qingniu.wrist.ble.WristBleService"/>
+   <service android:name="com.qingniu.scale.measure.ble.ScaleBleService" />
+   <service android:name="com.qingniu.scale.measure.broadcast.ScaleBroadcastService"/>
    ```
-    	```
+
+   ```
+
     <!-- 1.0.9 之后版本（包含1.0.9版本）配置-->
      <service android:name="com.qingniu.qnble.scanner.BleScanService" android:permission="android.permission.BIND_JOB_SERVICE"/>
      <service android:name="com.qingniu.wrist.ble.WristBleService" android:permission="android.permission.BIND_JOB_SERVICE"/>
-      ```
+     <service android:name="com.qingniu.scale.measure.ble.ScaleBleService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+     <service android:name="com.qingniu.scale.measure.broadcast.ScaleBroadcastService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+    ```
+
 * SDK中使用到了v4包的资源，开发者项目中需要引入v4包的资源
 
 ## 注意事项
