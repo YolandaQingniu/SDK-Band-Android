@@ -4,8 +4,11 @@
 ### 混淆配置(proguard-rules)
 + -keep class com.qingniu.scale.model.BleScaleData{*;}
 
-##具体操作文档
+### 具体操作文档
 [具体集成说明文档](https://yolandaqingniu.github.io/zh/android/)
+
+### AndroidX适配
+[适配AndroidX的手环SDK](https://github.com/YolandaQingniu/SDK-Band-AndroidX)
 
 ### Android Studio
 * 在你工程的根目录下的 **build.gradle**添加**jitpack**支持

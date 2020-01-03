@@ -510,7 +510,9 @@ public class WristSettingPresenter {
         if (observable == null)
 
         {
-            ToastMaker.show(mView.getCtx(), mContext.getResources().getString(R.string.set_function_exception));
+            if (item.getType() != WristSettingConst.SETTING_JUMP) {
+                ToastMaker.show(mView.getCtx(), mContext.getResources().getString(R.string.set_function_exception));
+            }
             return;
         }
         observable.subscribe(new Consumer<WristSettingItem>()
@@ -523,7 +525,7 @@ public class WristSettingPresenter {
                     ToastMaker.show(mView.getCtx(), mContext.getString(R.string.hint_messaga) + item.getErrorMsg());
                 } else if (item.getName().equals(mContext.getResources().getString(R.string.get_real_time_data))) {
                     //"获取实时数据":
-                    ToastMaker.show(mView.getCtx(), item.getErrorMsg() + "，"+mContext.getResources().getString(R.string.hint_messaga1) + item.getValue());
+                    ToastMaker.show(mView.getCtx(), item.getErrorMsg() + "，" + mContext.getResources().getString(R.string.hint_messaga1) + item.getValue());
                 } else {
                     ToastMaker.show(mView.getCtx(), item.getErrorMsg());
                 }
@@ -537,7 +539,7 @@ public class WristSettingPresenter {
      * 设置手环交互管理者
      */
     public void setBandManager(QNBandManager mBandManager) {
-        mSendUtils = new WristSendUtils(mBandManager,mContext);
+        mSendUtils = new WristSendUtils(mBandManager, mContext);
         this.manager = mBandManager;
     }
 
