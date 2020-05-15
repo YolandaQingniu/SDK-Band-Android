@@ -22,16 +22,16 @@
    ```
 * 在你的module的根目录下的**build.gradle**添加依赖
 	```
-	<!--这里的版本号，1.0.9 可以指定为任意release版本-->
-	<!--如果希望一直使用最新版本可以替换 1.0.9 为 master-SNAPSHOT -->
+	<!--这里的版本号，1.1.0-beta1 可以指定为任意release版本-->
+	<!--如果希望一直使用最新版本可以替换 1.1.0-beta1 为 master-SNAPSHOT -->
 	dependencies {
 	        ...
-	        compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.9'
+	        compile 'com.github.YolandaQingniu:SDK-Band-Android:1.1.0-beta1'
 	}
 	```
 	
 ### Eclipse
-* 下载最新的[jar和so库](https://github.com/YolandaQingniu/SDK-Band-Android/releases/download/1.0.9/qnwristsdk-1.0.9-Android.zip)，导入下载的`jar和so库`
+* 下载最新的[jar和so库](https://github.com/YolandaQingniu/SDK-Band-Android/releases/download/1.1.0-beta1/qnwristsdk-1.1.0-beta1-Android.zip)，导入下载的`jar和so库`
 * 在清单文件中申请蓝牙权限、位置权限、网络权限（离线SDK不需要）
     ```
    <!--蓝牙权限-->
