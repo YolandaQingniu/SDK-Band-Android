@@ -2,9 +2,11 @@ package com.qingniu.qnble.demo.view;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,26 +17,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qingniu.qnble.demo.R;
-import com.qingniu.qnble.demo.SettingActivity;
 import com.qingniu.qnble.demo.bean.Config;
 import com.qingniu.qnble.demo.bean.User;
+import com.qingniu.qnble.demo.picker.WIFISetDialog;
 import com.qingniu.qnble.demo.util.AndroidPermissionCenter;
 import com.qingniu.qnble.demo.util.ToastMaker;
 import com.qingniu.qnble.demo.util.UserConst;
-import com.qingniu.qnble.demo.wrist.WristConnectActivity;
-import com.qingniu.qnble.utils.BleUtils;
 import com.qingniu.qnble.utils.QNLogUtils;
-import com.qingniu.wrist.constant.WristType;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
+import com.yolanda.health.qnblesdk.constant.QNDeviceType;
 import com.yolanda.health.qnblesdk.listener.QNResultCallback;
 import com.yolanda.health.qnblesdk.out.QNBleApi;
 import com.yolanda.health.qnblesdk.out.QNBleDevice;
 import com.yolanda.health.qnblesdk.out.QNConfig;
+import com.yolanda.health.qnblesdk.out.QNWiFiConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SystemScanActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class SelfManagementActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+    private final String TAG = SelfManagementActivity.class.getSimpleName();
 
     @BindView(R.id.scan_measuring)
     TextView mScanMeasuring;
@@ -64,9 +68,10 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
     private User mUser;
     private Config mConfig;
     private boolean isScanning;
+    private WIFISetDialog wifiSetDialog;
 
     public static Intent getCallIntent(Context context, User user, Config mConfig) {
-        return new Intent(context, SystemScanActivity.class)
+        return new Intent(context, SelfManagementActivity.class)
                 .putExtra(UserConst.CONFIG, mConfig)
                 .putExtra(UserConst.USER, user);
     }
@@ -96,6 +101,7 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
             TextView modelTv = (TextView) convertView.findViewById(R.id.modelTv);
             TextView macTv = (TextView) convertView.findViewById(R.id.macTv);
             TextView rssiTv = (TextView) convertView.findViewById(R.id.rssiTv);
+            ImageView deviceType = convertView.findViewById(R.id.deviceType);
 
             QNBleDevice scanResult = devices.get(position);
 
@@ -103,7 +109,11 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
             modelTv.setText(scanResult.getModeId());
             macTv.setText(scanResult.getMac());
             rssiTv.setText(String.valueOf(scanResult.getRssi()));
-
+            if (scanResult.isSupportWifi()) {
+                deviceType.setImageResource(R.drawable.wifi_icon);
+            } else {
+                deviceType.setImageResource(R.drawable.system_item_arrow);
+            }
 
             return convertView;
         }
@@ -115,10 +125,11 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_self_management);
         ButterKnife.bind(this);
 
         mQNBleApi = QNBleApi.getInstance(this);
+
         mUser = getIntent().getParcelableExtra(UserConst.USER);
         mConfig = getIntent().getParcelableExtra(UserConst.CONFIG);
         initData();
@@ -128,7 +139,6 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
         mListView.setAdapter(this.listAdapter);
 
         mListView.setOnItemClickListener(this);
-
     }
 
     private void initData() {
@@ -136,7 +146,8 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
         QNConfig mQnConfig = mQNBleApi.getConfig();//获取上次设置的对象,未设置获取的是默认对象
         mQnConfig.setAllowDuplicates(mConfig.isAllowDuplicates());
         mQnConfig.setDuration(mConfig.getDuration());
-        mQnConfig.setScanOutTime(mConfig.getScanOutTime());
+        //此API已废弃
+        //mQnConfig.setScanOutTime(mConfig.getScanOutTime());
         mQnConfig.setConnectOutTime(mConfig.getConnectOutTime());
         mQnConfig.setUnit(mConfig.getUnit());
         mQnConfig.setOnlyScreenOn(mConfig.isOnlyScreenOn());
@@ -147,6 +158,7 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
                 Log.d("ScanActivity", "initData:" + s);
             }
         });
+        wifiSetDialog = new WIFISetDialog(SelfManagementActivity.this);
     }
 
     @Override
@@ -195,12 +207,35 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
     };
 
     private void startScan() {
-        BluetoothAdapter bluetoothAdapter = BleUtils.getBluetoothAdapter(this);
+        BluetoothAdapter bluetoothAdapter = getBluetoothAdapter();
+
+        if (bluetoothAdapter == null) {
+            Toast.makeText(SelfManagementActivity.this,getResources().getString(R.string.device_not_support), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (bluetoothAdapter.getState() != BluetoothAdapter.STATE_ON) {
+            Toast.makeText(SelfManagementActivity.this,getResources().getString(R.string.open_ble), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         isScanning = bluetoothAdapter.startLeScan(scanCallback);
     }
 
+    private BluetoothAdapter getBluetoothAdapter() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            return bluetoothManager == null ? null : bluetoothManager.getAdapter();
+        } else {
+            return BluetoothAdapter.getDefaultAdapter();
+        }
+    }
+
     private void stopScan() {
-        BluetoothAdapter bluetoothAdapter = BleUtils.getBluetoothAdapter(this);
+        BluetoothAdapter bluetoothAdapter = getBluetoothAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(SelfManagementActivity.this, getResources().getString(R.string.device_not_support), Toast.LENGTH_SHORT).show();
+            return;
+        }
         bluetoothAdapter.stopLeScan(scanCallback);
         isScanning = false;
     }
@@ -211,17 +246,40 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
             return;
         }
         stopScan();
-        QNBleDevice device = this.devices.get(position);
-        //连接设备
-        connectDevice(device);
-    }
+        final QNBleDevice device = this.devices.get(position);
 
-    private void connectDevice(QNBleDevice device) {
-        if (device.getDeviceType() == WristType.WRIST_BLE_DEFAULT) {
-            startActivity(WristConnectActivity.getCallIntent(this, mUser, device));
+        if (device.getDeviceType() == QNDeviceType.SCALE_BLE_DEFAULT) {
+
+            if (device.isSupportWifi()) {
+                //双模秤
+                wifiSetDialog.setDialogClickListener(new WIFISetDialog.DialogClickListener() {
+                    @Override
+                    public void confirmClick(String ssid, String pwd) {
+                        Log.e(TAG, "ssid：" + ssid);
+                        startActivity(SelfConnectActivity.getCallIntent(SelfManagementActivity.this, mUser, device, new QNWiFiConfig(ssid, pwd)));
+                        wifiSetDialog.dismiss();
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+                wifiSetDialog.show();
+            } else {
+                startActivity(SelfConnectActivity.getCallIntent(SelfManagementActivity.this, mUser, device));
+            }
+
+        } else if (device.getDeviceType() == QNDeviceType.SCALE_BROADCAST) {
+            //广播秤
+            startActivity(SelfBroadcastScaleActivity.getCallIntent(SelfManagementActivity.this, mUser, device));
+        }else if (device.getDeviceType() == QNDeviceType.SCALE_KITCHEN) {
+            //厨房秤
+            startActivity(SelfKitchenScaleActivity.getCallIntent(SelfManagementActivity.this,device));
         } else {
-            startActivity(ScaleConnectActivity.getCallIntent(this, mUser, device));
+            Toast.makeText(this, getResources().getString(R.string.device_not_support), Toast.LENGTH_SHORT).show();
         }
+
     }
 
 
@@ -229,7 +287,7 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.scan_setting:
-                startActivity(SettingActivity.getCallIntent(this));
+                startActivity(CustomSettingActivity.getCallIntent(this));
                 finish();
                 break;
             case R.id.scanBtn:
@@ -240,7 +298,7 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
                     listAdapter.notifyDataSetChanged();
                     startScan();
                 } else {
-                    ToastMaker.show(this, getResources().getString(R.string.scanning));
+                    ToastMaker.show(this,getResources().getString(R.string.scanning));
                 }
                 break;
             case R.id.stopBtn:
@@ -262,7 +320,7 @@ public class SystemScanActivity extends AppCompatActivity implements AdapterView
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "" + getResources().getString(R.string.permission) + permissions[i] +getResources().getString(R.string.apply_for_to_success), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "" + getResources().getString(R.string.permission)+ permissions[i] + getResources().getString(R.string.apply_for_to_fail), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + getResources().getString(R.string.permission) + permissions[i] + getResources().getString(R.string.apply_for_to_fail), Toast.LENGTH_SHORT).show();
                 }
             }
         }

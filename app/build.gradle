@@ -80,5 +80,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     compile "io.reactivex.rxjava2:rxjava:$RX_JAVA2_VERSION"
-    compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.9'
+    //compile 'com.github.YolandaQingniu:SDK-Band-Android:1.0.9'
+    compile project(':qnbandsdk')
+    compile 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
 }

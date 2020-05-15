@@ -29,7 +29,7 @@ import com.qingniu.qnble.demo.wrist.utils.WristDataListener;
 import com.qingniu.qnble.demo.wrist.utils.WristDataListenerManager;
 import com.qingniu.qnble.utils.QNLogUtils;
 import com.yolanda.health.qnblesdk.constant.CheckStatus;
-import com.yolanda.health.qnblesdk.constant.QNDeviceStatus;
+import com.yolanda.health.qnblesdk.constant.QNBandStatus;
 import com.yolanda.health.qnblesdk.listener.QNBandEventListener;
 import com.yolanda.health.qnblesdk.listener.QNBleConnectionChangeListener;
 import com.yolanda.health.qnblesdk.listener.QNDfuProgressCallback;
@@ -210,6 +210,37 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
                 });
             }
 
+            @Override
+            public void onBandStateChange(QNBleDevice device, int status) {
+                if (device.getMac().equals(mWristDevice.getMac())) {
+                    if (status == QNBandStatus.STATE_READY) {
+                        QNLogUtils.logAndWrite("状态改变STATE_READY");
+                        isReady = true;
+                        QNBandManager bandManager = mQNBleApi.getBandManager();
+                        presenter.setBandManager(bandManager);
+                        /*bandManager.bindBand("123456789", new QNBindResultCallback() {
+                            @Override
+                            public void onStatusResult(int bindStatus) {
+                                QNLogUtils.error("绑定状态，bindStatus=" + bindStatus);
+                                if (bindStatus == 100) {
+                                    //可以进行命令的发送
+                                }
+                            }
+
+                            @Override
+                            public void onConfirmBind() {
+                                QNLogUtils.error("请确认弹窗");
+                            }
+
+                            @Override
+                            public void onResult(int code, String msg) {
+                                QNLogUtils.error("绑定状态，onResult=" + msg);
+                            }
+                        });*/
+                    }
+                }
+            }
+
         });
     }
 
@@ -257,36 +288,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
                 Log.d(TAG, "onConnectError：" + errorCode);
             }
 
-            @Override
-            public void onDeviceStateChange(QNBleDevice device, int status) {
-                if (device.getMac().equals(mWristDevice.getMac())) {
-                    if (status == QNDeviceStatus.STATE_READY) {
-                        QNLogUtils.logAndWrite("状态改变STATE_READY");
-                        isReady = true;
-                        QNBandManager bandManager = mQNBleApi.getBandManager();
-                        presenter.setBandManager(bandManager);
-                        /*bandManager.bindBand("123456789", new QNBindResultCallback() {
-                            @Override
-                            public void onStatusResult(int bindStatus) {
-                                QNLogUtils.error("绑定状态，bindStatus=" + bindStatus);
-                                if (bindStatus == 100) {
-                                    //可以进行命令的发送
-                                }
-                            }
 
-                            @Override
-                            public void onConfirmBind() {
-                                QNLogUtils.error("请确认弹窗");
-                            }
-
-                            @Override
-                            public void onResult(int code, String msg) {
-                                QNLogUtils.error("绑定状态，onResult=" + msg);
-                            }
-                        });*/
-                    }
-                }
-            }
 
         });
     }
@@ -295,7 +297,7 @@ public class WristConnectActivity extends AppCompatActivity implements WristSett
      * 构建手环用户
      */
     private void buildQNUser() {
-        qnUser = mQNBleApi.buildUser(mUser.getUserId(), mUser.getHeight(), mUser.getGender(), mUser.getBirthDay(), mUser.getWeight(), new QNResultCallback() {
+        qnUser = mQNBleApi.buildUser(mUser.getUserId(), mUser.getHeight(), mUser.getGender(), mUser.getBirthDay(), mUser.getWeight(),new QNResultCallback() {
             @Override
             public void onResult(int code, String msg) {
                 canConnect = code == CheckStatus.OK.getCode();

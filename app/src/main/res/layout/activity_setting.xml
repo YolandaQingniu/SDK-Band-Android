@@ -176,8 +176,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
-
                 <ImageView
                     android:id="@+id/user_calc_arrow"
                     style="@style/user_arrow_image"
@@ -203,7 +201,7 @@
                         android:id="@+id/athlete_calc_rb"
                         style="@style/user_radio_button"
                         android:layout_marginStart="10dp"
-                        android:text="@string/algorithm_model"/>
+                        android:text="@string/athlete_mode"/>
 
                 </RadioGroup>
 
@@ -212,6 +210,47 @@
             <TextView
                 style="@style/user_explain_text"
                 android:text="@string/mode_hint"/>
+        </LinearLayout>
+
+        <TextView style="@style/divide_line"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/user_clothes_explain"
+                    style="@style/user_small_text"
+                    android:text="@string/user_cloth_weight"/>
+
+                <ImageView
+                    android:id="@+id/user_clothes_arrow"
+                    style="@style/user_arrow_image"
+                    android:src="@drawable/system_item_arrow"/>
+
+                <EditText
+                    android:id="@+id/user_clothes_edt"
+                    android:layout_width="120dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toStartOf="@+id/user_clothes_arrow"
+                    android:background="@drawable/edittext_background"
+                    android:text="0"
+                    android:inputType="numberDecimal"/>
+
+
+            </RelativeLayout>
+
+            <TextView
+                style="@style/user_explain_text"
+                android:text="@string/user_cloth_weight_hint"/>
         </LinearLayout>
 
         <TextView style="@style/divide_line"/>
@@ -248,9 +287,6 @@
                 style="@style/user_explain_text"
                 android:text="@string/user_height_explain"/>
         </LinearLayout>
-
-        <TextView style="@style/divide_line"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -338,15 +374,10 @@
             <TextView
                 android:id="@+id/ble_scan_explain"
                 style="@style/user_small_text"
-                android:text="@string/select_scan_mode"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="11dp" />
+                android:text="@string/select_scan_mode"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-
 
                 <RadioGroup
                     android:id="@+id/ble_scan_grp"
@@ -469,6 +500,12 @@
                     android:src="@drawable/system_item_arrow"/>
             </RelativeLayout>
 
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/onlyBroadCast"
+                android:layout_width="wrap_content"
+                android:text="@string/broadcast_ble_intensify"
+                android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/connect_out_timeEt"
                 android:layout_width="match_parent"
@@ -554,25 +591,6 @@
             android:text="@string/confirm"
             android:textSize="18sp"/>
 
-        <Button
-            android:id="@+id/btn_system_scan"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:visibility="gone"
-            android:text="系统扫描"
-            android:textSize="18sp"/>
-
-        <Button
-            android:visibility="gone"
-            android:id="@+id/btn_wrist"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:text="手环"
-            android:textSize="18sp"/>
     </LinearLayout>
 
 </ScrollView>

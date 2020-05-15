@@ -8,7 +8,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -134,7 +133,7 @@ public class StringWheelView extends ScrollView {
 
     private TextView createView(String item) {
         TextView tv = new TextView(context);
-        tv.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight));
+        tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight));
         tv.setSingleLine(true);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         tv.setText(item);
@@ -145,7 +144,7 @@ public class StringWheelView extends ScrollView {
 
     View createIdleView(int idleHeight) {
         View v = new View(context);
-        v.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, idleHeight));
+        v.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, idleHeight));
         return v;
     }
 
