@@ -5,7 +5,7 @@
 + -keep class com.qingniu.scale.model.BleScaleData{*;}
 
 ### 具体操作文档
-[具体集成说明文档](https://yolandaqingniu.github.io/zh/android/)
+[具体集成说明文档](https://yolandaqingniu.github.io/zh/)
 
 ### AndroidX适配
 [适配AndroidX的手环SDK](https://github.com/YolandaQingniu/SDK-Band-AndroidX)
