@@ -117,6 +117,7 @@
                     <EditText
                         android:id="@+id/ssidEdit"
                         android:layout_width="match_parent"
+                        android:text="ch"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext" />
                 </LinearLayout>
@@ -135,6 +136,7 @@
                         android:id="@+id/wifiPwdEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="ch12345678"
                         android:imeOptions="actionNext" />
                 </LinearLayout>
 
@@ -151,6 +153,7 @@
                     <EditText
                         android:id="@+id/serverUrlEd"
                         android:layout_width="match_parent"
+                        android:text="http://wsp.jhswkj.net:80/yolanda/wsp?code="
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext" />
                 </LinearLayout>
@@ -168,6 +171,7 @@
                     <EditText
                         android:id="@+id/OTAUrlEd"
                         android:layout_width="match_parent"
+                        android:text="http://ota.yolanda.hk"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext" />
                 </LinearLayout>
@@ -186,6 +190,7 @@
                         android:id="@+id/secretKeyEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="ahgsyutrqwesadnh"
                         android:imeOptions="actionDone" />
                 </LinearLayout>
             </LinearLayout>
