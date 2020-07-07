@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="localbroadcastmanager-28.0.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/8239f903617bfa2c69a4e7bafc9560d8deb96fc3/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/8239f903617bfa2c69a4e7bafc9560d8deb96fc3/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/3c69d98715102b5b63ba1968d370c56235b3c3ac/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/3c69d98715102b5b63ba1968d370c56235b3c3ac/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

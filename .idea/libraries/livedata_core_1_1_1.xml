@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="livedata-core-1.1.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/a5fb1f2681a816d7dda32ac848d21c28f12d115a/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/a5fb1f2681a816d7dda32ac848d21c28f12d115a/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/63de29909c7415b8123cae21191535ec2e237de4/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/63de29909c7415b8123cae21191535ec2e237de4/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
