@@ -43,17 +43,17 @@
         jumboMode="false"
         optimize="true"
         revision="28.0.3"
-        sha1="537cfd13ec0b77e2f686811a84297b84125dd839">
+        sha1="66939c5727620c210433031bc885cd55aef787b6">
         <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/classes_e3b36a817c8eae1e3c73b556995f9fba552a2d8f.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/ch/Code/workspace/android/SDK-Band-Android/qnbandsdk/build/intermediates/bundles/default/libs/qnwristsdk-1.1.0-beta8.jar"
+        jar="/Users/ch/Code/workspace/android/SDK-Band-Android/qnbandsdk/build/intermediates/bundles/default/libs/qnwristsdk-1.1.0-beta9.jar"
         jumboMode="false"
         optimize="true"
         revision="28.0.3"
-        sha1="b6c4591d8e53d0e766d10a87b5fdc8c9ff8dd5fc">
-        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/qnwristsdk-1.1.0-beta8_142dcee0d0b2182e79b9b96cadd4ede6ee6fd103.jar" />
+        sha1="8cdadc5702c5db99585a68d05fb62b671dddd6f5">
+        <dex dex="/Users/ch/Code/workspace/android/SDK-Band-Android/app/build/intermediates/pre-dexed/debug/qnwristsdk-1.1.0-beta9_90d132266fae25647757f816d774050649a45013.jar" />
     </item>
     <item
         is-multidex="false"
